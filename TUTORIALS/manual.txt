@@ -133,31 +133,108 @@ int difference = a - b; // Subtraction
 int product = a * b;    // Multiplication
 int quotient = a / b;   // Division
 int remainder = a % b;  // Modulus
-int result = (a + b) * (a - b);  // // Arithmetic expressions can also include parentheses like in maths
+int result = (a + b) * (a - b);  // Arithmetic expressions can also include parentheses like in maths
+
+------------------------------------------------------------------------------------------------------------------------------
+* The For and While statements:
+
+Both for and while statements are control structures of loop, they are used to execute a fragment of code in loop until a defined condition is met.
+The for statement is usually used when the number of iterations is known in advance or when a specific range is required. Its syntax consists of 3 parts, it is enclosed in { and separated by ; (semicolons). The first part is the initialisation, where the condition is stated. The second one is the increment part, where the condition is checked. As for the last part, the variables change until the condition is met. 
+The while statement is more flexible and is used when the number of iterations is not known, or when the control of the loop is more complex. It also have the same parts; to sum up both are used for iterations in the code.
 
 EX: Program that print Fahrenheit-Celsius table 
 
-1. #include <stdio.h>
-2. int main() {
-3. int fa, cel; // You can declare several variable at once
-4. int lower, upper, steps;
-5. lower = 0;      // You notice that the variable was declared prior to assigning it a value here
-6. upper = 200;    
-7. steps = 10;     
-8. fa = lower;
-9. while (fa <= upper) {
+1.  #include <stdio.h>
+2.  int main() {
+3.  float fa, cel; // You can declare several variable at once
+4.  float lower, upper; 
+5.  lower = 0; // You notice that the variable was declared prior to assigning it a value here
+6.  upper = 200;    
+7.  #define steps 10; // #define is used to declare constants    
+8.  fa = lower;
+9.  while (fa <= upper) {
 10. // Conversion happens here
-11. cel = 5 * (fa - 32) / 9;  
-12. printf("%d\t%d\n", fa, celsius); 
+11. cel = 5.0 * (fa - 32) / 9.0;  
+12. printf("%3.0f\t%6.1f\n", fa, cel); 
 13. /* %d is a format specifier used to print integers
 14. \t is an escape sequence used to insert a tab character in the output.
 15. \n is an escape sequence used to insert a new line 
 16. So this command indicate to print an integer, insert a tab, print an integer, insert a tab, than jump a line, before specifying 
 17. the variables to print */ 
-18. fa = fa + step;
+18. fa = fa + steps;
 19. }
 20. return 0;
 11. }
+
+N.B.:
+%6d   print as decimal integer, at least 6 characters wide
+%f    print as floating point
+%6f   print as floating point, at least 6 characters wide
+%.2f  print as floating point, 2 characters after decimal point
+%6.2f print as floating point, at least 6 wide and 2 after decimal point, so %6.1 with 1 decimal instead of 2
+%3.0f print as floating point, at least 3 wide and 0 after decimal point
+
+------------------------------------------------------------------------------------------------------------------------------
+* Character Input and Output
+
+The standard library's input and output model is determined: text input or output, regardless of its source or destination, is treated as streams of characters. Each stream represents a sequence of characters divided into lines, where each line consists of zero or more characters followed by a newline character. 
+Within the standard library, several functions facilitate reading or writing one character at a time, with getchar and putchar being the simplest. The keyword getchar retrieves the next input character from a text stream each time it's called, while putchar prints a character whenever it's invoked. 
+
+- File Copying and Character Counting
+
+With just getchar and putchar, a program can effectively copy its input to output character by character until it encounters an end-of-file indicator. The putchar(c) function is a standard C function that is used to output a single character to the standard output (usually the terminal). The function getchar() is another standard C library function used to read a single character from the standard input (usually the keyboard) and return its ASCII value as an integer. 
+
+Characters are stored internally as bit patterns, with the char type specifically designed for such storage. However, any integer type can serve this purpose, with int often preferred for its ability to hold both characters and the end-of-file indicator, EOF.
+A concise approach to file copying can be achieved by embedding the getchar assignment within the condition of a while loop, enabling a streamlined structure for the program. Caution, ( ) are necessary for the syntax: otherwise, the code won't work.
+
+EX: Program that count characters in input
+
+1.  #include <stdio.h>
+2.  int main()
+3.  {
+4.  long nc;
+5.  nc = 0;
+6.  while (getchar() != EOF){
+7.  ++nc;
+8.  printf("%ld\n", nc);
+9.  }
+10. return 0;
+11. }
+
+N.B.:
+CTRL+D send "end-of-file" (EOF) signal, you need to use this combination in the terminal after opening the program and entering data for it to run properly, and see the result. This signal, by opposition to CTRL+C that end programs and terminal process, informs instead the shell that user has no more data to input.
+Caution, for non-unix that is to say for an OS different from macOS and Linux, such as evil Windows, it's not CTRL+D but CTRL+Z.
+
+EX: Program that count the number of lines in input
+
+1.  #include <stdio.h>
+2.  int main() {
+3.  int c;
+4.  int line_count = 0; 
+5.  while ((c = getchar()) != EOF) {
+6.  putchar(c);
+7.  if (c == '\n') { // If newline character is encountered
+8.  line_count++; // add 1 to  line_count variable, use ++ to add 1
+9.  }
+10. }
+11. }
+12. printf("Total number of lines: %d\n", line_count);
+13. return 0;           
+14. }
+
+N.B.: 
+The terminal will echo what u type it's normal, we ll see later how to prevent that from happening
+
+------------------------------------------------------------------------------------------------------------------------------
+* Arrays, and Creation of Functions
+
+An array is like one or several cells of an excel sheet, 
+    
+
 ------------------------------------------------------------------------------------------------------------------------------
 
-* The for statement
+
+
+
+
+
