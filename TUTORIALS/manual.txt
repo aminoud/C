@@ -1,8 +1,8 @@
 Welcome to the Comprehensive Manual of C Language! Whether you're a beginner stepping into the world of programming or an experienced coder familiar with other languages, this manual is designed to equip you with the essential skills and knowledge to master the C programming language.
 
-This manual in the the form of synthetic charts, with examples that encompass main situations leading its readers to a ready to go ability to code. Also, it includes exercises and a reference index of essential reserved words (keywords) in the annexes.
+This manual in the the form of synthetic charts, with examples that encompass main situations leading its readers to a ready to go ability to code. Also, it includes exercises and a reference index of essential reserved words (keywords that we will learn later) in the annexes.
 
-###############################################################################################################################
+##############################################################################################################################
 
 * Why Learn C?
 
@@ -11,8 +11,110 @@ C is often regarded as the "primitive sea of all programming languages", giving 
 Moreover, C is widely used in operating system development due to its ability to interact closely with hardware and manage system resources efficiently. Operating systems, being the bridge between hardware and software, rely heavily on C's features for tasks such as memory management, process scheduling, and device control.
 
 Therefore, learning C not only provides a solid foundation for understanding how computers operate at a fundamental level but also equips programmers with the skills to write efficient and powerful code as drivers, making it an indispensable language in various domains of software development.
--------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------
 
-* Main Features of C
+* What is a compiler, and how to use it?
 
-- Syntax Simplicity
+If C allow us to give or receive more naturally instruction to the computer/programs, a compiler act as a translator to make the coding language intelligible to the machine. 
+
+A compiler is a software tool that translates high-level programming languages into machine-readable code, typically in the form of executable files or intermediate code.
+
+GCC (GNU Compiler Collection) is one of the most widely used compilers for C and other programming languages. It is open-source and available for various operating systems, including Windows, macOS, and Linux.
+
+Here's how to use GCC to compile a C program on different operating systems:
+
+Windows: gcc my_program.c -o my_program.exe
+This command compiles my_program.c and generates an executable file named my_program.exe.
+
+macOS: gcc my_program.c -o my_program
+GCC is usually pre-installed on macOS. You can open the Terminal and navigate to the directory containing your C source code, that is to say the my_program.c file. This command compiles my_program.c and generates an executable file named my_program.
+
+Linux (The best OS, yes I love Linux): gcc my_program.c -o my_program
+In all cases, -o option is used to specify the name of the output executable file. If not provided, GCC generates an executable file named a.out by default.
+
+Once the program is compiled, you can run the executable file to execute the program on your operating system. For example, on Windows, you would run my_program.exe, and on macOS or Linux, you would run ./my_program.
+------------------------------------------------------------------------------------------------------------------------------
+
+* Main Features of C:
+
+
+- Syntax Simplicity (C is close to natural language)
+It refers to the rules and structure governing how code is written and formatted. It determines the correct arrangement of symbols, keywords, and punctuation marks to form valid and working code. 
+EX: Code to print Hello Everyone !!! 
+  
+#include <stdio.h>
+int main() {
+    printf("Hello Everyone !!!");
+    return 0;
+}
+
+- Portability
+C programs can be easily ported across different platforms with minimal modifications, making it an ideal choice for writing system-level software.
+
+- Efficiency, Modularity, and Extensibility
+C offers low-level memory manipulation capabilities, allowing for precise control over system resources and optimal performance. It also supports modular programming through functions and libraries, facilitating code reuse and maintainability.
+------------------------------------------------------------------------------------------------------------------------------
+
+* C Language Essentials 1: The Reserved words
+
+C as all the coding language, by opposition to binary (LOL), use keywords to send/receive instructions to the hardware/software. Reserved words are predefined identifiers that have special meanings and are reserved by the language for specific purposes. These words cannot be used as identifiers (such as variable names or function names) by programmers because they are already used by the language itself. 
+
+Here's an example of reserved words in Code to print Hello Everyone: 
+1. #include <stdio.h>
+2. int main() {
+3. printf("Hello Everyone !!!");
+4. return 0;
+5. }
+
+In the line 1, the keyword is #include. It is  is a pre-processor directive in C that includes the contents of a header file in the program (stdio.h in this case, don't mind this for the moment, it is used to make declarations and definitions available from the standard input/output library).
+
+In the line 2, the keyword is int. This is a keyword in C used to declare integer data types, that is to say variables where we can stock data as a number (for example int a = 5). In this context, it's used to specify the result (return) type of the main function of the program, which is an integer, that is to say a whole number that can be either positive, negative, or zero.
+
+Still in line 2, the keyword is main. This is a special function in C that serves as the entry point of the program, the execution of the program begins from the main function.. It must be defined in every C program, (Some compiler will require int main, others won't, being satisfied by main without int before...).
+
+In the line 3, the keyword is printf: This is a function provided by the standard input/output library in C. It is used to print formatted output to the standard output (usually the console).
+
+In the line 4, the keyword is return: This is a keyword in C used to return a value from a function (also no necessary in some compilers). In the main function, it's used to return an exit status to the operating system, indicating the success or failure of the program execution.
+------------------------------------------------------------------------------------------------------------------------------
+
+* C Language Essentials 2: Other Elements of the Syntax 
+
+C have some other elements fundamental for its syntax:
+
+- Case Sensitivity: C is case-sensitive, meaning uppercase and lowercase letters are treated as distinct. For example, Main, main, and MAIN would be interpreted as different identifiers.
+
+- Semicolons: In C, statements are terminated by semicolons (;). Omitting a semicolon at the end of a statement is like a "crime" when coding in C, the code will fail without these fancy semicolons.
+
+- Whitespace: Spaces, tabs, and newlines are collectively known as whitespace and are generally used to improve code readability. In C, whitespace is typically ignored: a + b and a+b are equivalent.
+
+- Comments: Comments are used to add explanatory notes within the code. In C, comments can be written in two forms:
+Single-line comments: Begin with // and extend to the end of the line.
+Multi-line comments: Enclosed between /* and */ and can span multiple lines.
+EX: Updated Code to print Hello Everyone !!! 
+1. // This is a single line comment, you cant use the line 2 to pursue your explanatory notes
+2. #include <stdio.h>
+3. int main() {
+4. /* This is a multi line comment. Please use as many explanatory notes as you can, and organise them well 
+5. Otherwise, guys who'll read your code will be sad, and angry. */ 
+6. printf("Hello Everyone !!!");
+7. return 0;
+8.}
+
+- Identifiers: They are user-defined names used to represent variables, functions, and other entities in the program. Identifiers must follow specific rules:
+A. Must begin with a letter (either uppercase or lowercase) or an underscore (_).
+B. Subsequent characters can be letters, digits, or underscores.
+C. Cannot be a keyword or contain spaces or special characters.
+
+- Operators: Operators are symbols used to perform operations on operands. C supports various types of operators, including arithmetic, relational, logical, assignment, etc. For example, +, -, *, / are arithmetic operators.
+
+- Control Structures: Control structures dictate the flow of execution in a program. Common control structures in C include if-else, switch, for, while, and do-while statements.
+
+- Function Declarations: They are blocks of code that perform a specific task. Function declarations specify the function's return type, name, and possible parameters. The syntax for function declaration is return_type function_name(parameters);.
+
+- Arrays: They are used to store multiple values of the same data type in contiguous memory locations. The syntax for array declaration is datatype array_name[size];.
+
+##############################################################################################################################
+
+A
+
+------------------------------------------------------------------------------------------------------------------------------
