@@ -1,9 +1,18 @@
 Welcome to the Comprehensive Manual of C Language! Whether you're a beginner stepping into the world of programming or an experienced coder familiar with other languages, this manual is designed to equip you with the essential skills and knowledge to master the C programming language.
 
-Why Learn C?
+This manual in the the form of synthetic charts, with examples that encompass main situations leading its readers to a ready to go ability to code. Also, it includes exercises and a reference index of essential reserved words (keywords) in the annexes.
+
+###############################################################################################################################
+
+* Why Learn C?
 
 C is often regarded as the "primitive sea of all programming languages", giving birth to C++, Java, and Python... Unlike high-level languages that offer abstraction from the hardware, C operates closer to the hardware, making it a low-level language. This proximity allows C programmers to have greater control over memory allocation and the ability to interact directly with hardware resources, resulting in more efficient and powerful programming.
 
 Moreover, C is widely used in operating system development due to its ability to interact closely with hardware and manage system resources efficiently. Operating systems, being the bridge between hardware and software, rely heavily on C's features for tasks such as memory management, process scheduling, and device control.
 
 Therefore, learning C not only provides a solid foundation for understanding how computers operate at a fundamental level but also equips programmers with the skills to write efficient and powerful code as drivers, making it an indispensable language in various domains of software development.
+-------------------------------------------------------------------------------------------------------------------------------
+
+* Main Features of C
+
+- Syntax Simplicity
