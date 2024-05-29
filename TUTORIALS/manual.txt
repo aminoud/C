@@ -115,6 +115,49 @@ C. Cannot be a keyword or contain spaces or special characters.
 
 ##############################################################################################################################
 
-A
+* Variables and Arithmetic Expressions
 
+Variables are used to store and manipulate data, there are specific data types. They are named memory locations that can store data., and must be declared with a specific data type before they can be used. There are integers, floating-point numbers, characters, and other variable types.
+EX:
+
+int a;            // Integer variable 
+float b;          // Floating-point variable 
+char c;           // Character variable 
+
+Arithmetic expressions are operands and operators that perform arithmetic calculations. Operands are variables, constants, or values used to do arithmetic operations. Operators are symbols that specify the operation to be performed, + (for addition), - (for subtraction), * (for multiplication), / (for division), and % (for modulus).
+EX:
+
+int a = 10, b = 5;
+int sum = a + b;        // Addition
+int difference = a - b; // Subtraction
+int product = a * b;    // Multiplication
+int quotient = a / b;   // Division
+int remainder = a % b;  // Modulus
+int result = (a + b) * (a - b);  // // Arithmetic expressions can also include parentheses like in maths
+
+EX: Program that print Fahrenheit-Celsius table 
+
+1. #include <stdio.h>
+2. int main() {
+3. int fa, cel; // You can declare several variable at once
+4. int lower, upper, steps;
+5. lower = 0;      // You notice that the variable was declared prior to assigning it a value here
+6. upper = 200;    
+7. steps = 10;     
+8. fa = lower;
+9. while (fa <= upper) {
+10. // Conversion happens here
+11. cel = 5 * (fa - 32) / 9;  
+12. printf("%d\t%d\n", fa, celsius); 
+13. /* %d is a format specifier used to print integers
+14. \t is an escape sequence used to insert a tab character in the output.
+15. \n is an escape sequence used to insert a new line 
+16. So this command indicate to print an integer, insert a tab, print an integer, insert a tab, than jump a line, before specifying 
+17. the variables to print */ 
+18. fa = fa + step;
+19. }
+20. return 0;
+11. }
 ------------------------------------------------------------------------------------------------------------------------------
+
+* The for statement
