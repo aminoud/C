@@ -303,10 +303,83 @@ EX: Dumb Function Code that add two numbers (no need for CTR+D here)
 13. return convergence;
 14. }
 
-
-
 * External Variables:
 
+- What are they?
+
+Variables within functions are like temporary entities, because they are lost outside of their function. However, there's an alternative: external variables, defined outside any function and declared in each function that uses them. 
+The process involves declaring the variables as "extern" within functions to access them. 
+N.B.: You can avoid using extern, but keep in mind it needs to be done before its use, and that a well-coded program should be memory-efficient.
+
+- How to use them?
+
+You can use them in 3 steps: 
+
+A- Declaration (may be in a header file, for long code, like dumb_header.h)
+extern int globalVariable; 
+B- Definition
+int globalVariable = 10;
+C- Access
+void someFunction() {
+printf("The value of globalVariable is: %d\n", globalVariable);
+}
+N.B.: When compiling your program and using a header, make sure to include it in the code, and when having multiple c files to compile all source files together (gcc -o program random_dumb_code_1.c random_dumb_code_2.c).
+
+EX: A program with 1 c file and 1 header (to compile it, only run: gcc -o program random_dumb_code.c) 
+
+EX_part_1: dumb_header.h
+1. extern int globalVariable;
+
+EX_part_2: random_dumb_code.c
+1. #include "dumb_header.h"
+2. blablabla...
+
+EX: Program that print the longest line with an external variable, but without a header file 
+
+1.  #include <stdio.h>
+2.  #define MAXLINE 3000
+3.  int maximum;
+4.  char input[MAXLINE];
+5.  char longest_line[MAXLINE];
+6.  int read_line(void);
+7.  void duplicate(void);
+8.  main()
+9.  {
+10. int length;
+11. extern int maximum;
+12. extern char longest_line[];
+13. }
+14. maximum = 0;
+15. while ((length = read_line()) > 0)
+16. if (length > maximum) {
+17. maximum = length;
+18. duplicate();
+19. }
+20. if (maximum > 0)
+21. printf("%s", longest_line);
+22. return 0;
+23. int read_line(void)
+24. {
+25. int character, index;
+26. extern char input[];
+27. }
+28. for (index = 0; index < MAXLINE - 1
+29. && (character=getchar)) != EOF && character != '\n'; ++index)
+30. input[index] = character;
+31. if (character == '\n') {
+32. input[index] = character;
+33. ++index;
+34. }
+35. input[index] = '\0';
+36. return index;
+37. void duplicate(void)
+38. {
+39. int index;
+40. extern char input[], longest_line[];
+41. }
+42. index = 0;
+43. while ((longest_line[index] = input[index]) != '\0')
+44. ++index;
 
 ------------------------------------------------------------------------------------------------------------------------------
 
