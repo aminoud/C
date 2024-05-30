@@ -142,7 +142,7 @@ Both for and while statements are control structures of loop, they are used to e
 The for statement is usually used when the number of iterations is known in advance or when a specific range is required. Its syntax consists of 3 parts, it is enclosed in { and separated by ; (semicolons). The first part is the initialisation, where the condition is stated. The second one is the increment part, where the condition is checked. As for the last part, the variables change until the condition is met. 
 The while statement is more flexible and is used when the number of iterations is not known, or when the control of the loop is more complex. It also have the same parts; to sum up both are used for iterations in the code.
 
-EX: Program that print Fahrenheit-Celsius table 
+EX: Program that prints Fahrenheit-Celsius table 
 
 1.  #include <stdio.h>
 2.  int main() {
@@ -187,7 +187,7 @@ With just getchar and putchar, a program can effectively copy its input to outpu
 Characters are stored internally as bit patterns, with the char type specifically designed for such storage. However, any integer type can serve this purpose, with int often preferred for its ability to hold both characters and the end-of-file indicator, EOF.
 A concise approach to file copying can be achieved by embedding the getchar assignment within the condition of a while loop, enabling a streamlined structure for the program. Caution, ( ) are necessary for the syntax: otherwise, the code won't work.
 
-EX: Program that count characters in input
+EX: Program that counts characters in input
 
 1.  #include <stdio.h>
 2.  int main()
@@ -205,7 +205,7 @@ N.B.:
 CTRL+D send "end-of-file" (EOF) signal, you need to use this combination in the terminal after opening the program and entering data for it to run properly, and see the result. This signal, by opposition to CTRL+C that end programs and terminal process, informs instead the shell that user has no more data to input.
 Caution, for non-unix that is to say for an OS different from macOS and Linux, such as evil Windows, it's not CTRL+D but CTRL+Z.
 
-EX: Program that count the number of lines in input
+EX: Program that counts the number of lines in input
 
 1.  #include <stdio.h>
 2.  int main() {
@@ -228,8 +228,85 @@ The terminal will echo what u type it's normal, we ll see later how to prevent t
 ------------------------------------------------------------------------------------------------------------------------------
 * Arrays, and Creation of Functions
 
-An array is like one or several cells of an excel sheet, 
-    
+An array is like one or several cells of an excel sheet, arrays are essential data structures. It allows the storage and management of multiple values of the same type under a single name, allowing efficient data grouping and manipulation.  
+
+- Defining and Initialising Arrays
+
+int numbers[7]; or int numbers[6] = {3, 5, 7, 11, 19, 33}; to declare while initialising, [6] = {1,2}; is possible but other elements will be set to 0. Matrix are possible, with int matrix[4][4];    
+
+EX: Program that counts the number of characters each line and print the longest
+
+1. #include <stdio.h>
+2. #define MAXLENGTH 1000
+3. int fetch_line(char buffer[], int maxlength);
+4. void transfer(char destination[], char source[]);
+5. int main() {
+6. int length;
+7. int maxLength = 0;
+8. char buffer[MAXLENGTH];
+9. char maxBuffer[MAXLENGTH];
+10. while ((length = fetch_line(buffer, MAXLENGTH)) > 0) {
+11. if (length > maxLength) {
+12. maxLength = length;
+13. transfer(maxBuffer, buffer);
+14. }
+15. }
+16. if (maxLength > 0)
+17. printf("%s", maxBuffer);
+18. return 0;
+19. }
+20. int fetch_line(char str[], int limit) {
+21. int character, index;
+22. for (index = 0; index < limit - 1 && (character = getchar()) != EOF && character != '\n'; ++index)
+23. str[index] = character;
+24. if (character == '\n') {
+25. str[index] = character;
+26. ++index;
+27. }
+28. str[index] = '\0';
+29. return index;
+30. }
+31. void transfer(char destination[], char source[]) {
+32. int idx = 0;
+33. while ((destination[idx] = source[idx]) != '\0')
+34. ++idx;
+35. }
+
+- What is a Function
+
+It's a building block, encapsulating specific tasks to enhance code modularity and readability. 
+Again, fetch_line is the function that retrieve input characters until it encounters an end-of-file (EOF) or a newline character ('\n'). Functions have parameters, fetch_line has a buffer[] (an array to store the input characters) and a limit (the maximum number of characters to read).
+
+- Creating a Function
+
+It is done in 5 steps: 
+A- Declaration (Prototype), where is the function's name, return type, and possible parameters
+B- Definition, where are the function's return type name, possible parameters, and the body of the function enclosed in {}
+C- Function Body
+D- Possible Return Statement (if applicable), where the value to be returned is set
+E- Function Call, to use the function (not necessarily right after the previous step, but when the function is needed)
+
+EX: Dumb Function Code that add two numbers (no need for CTR+D here)
+
+1.  #include <stdio.h>
+2.  int dumb_function(int essence1, int essence2);
+3.  int main() {
+4.  int essence1, essence2, outcome;
+5.  scanf("%d", &essence1);
+6.  scanf("%d", &essence2);
+7.  outcome = dumb_function(essence1, essence2); 
+8.  printf("The dumb function reveals: %d\n", outcome); 
+9.  return 0;
+10. }
+11. int dumb_function(int essence1, int essence2) {
+12. int convergence = essence1 + essence2; 
+13. return convergence;
+14. }
+
+
+
+* External Variables:
+
 
 ------------------------------------------------------------------------------------------------------------------------------
 
