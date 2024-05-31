@@ -106,12 +106,15 @@ B. Subsequent characters can be letters, digits, or underscores.
 C. Cannot be a keyword or contain spaces or special characters.
 
 - Operators: Operators are symbols used to perform operations on operands. C supports various types of operators, including arithmetic, relational, logical, assignment, etc. For example, +, -, *, / are arithmetic operators.
+	Don't mind this: Just for good measure, there are also six operators for bit manipulation ( for char, short, int, and long, whether signed or unsigned). They are: & (bitwise AND), | (bitwise inclusive OR), ^ (bitwise exclusive OR), << (left shift), >> (right shift), ~ (one's complement said unary).
 
 - Control Structures: Control structures dictate the flow of execution in a program. Common control structures in C include if-else, switch, for, while, and do-while statements.
 
 - Function Declarations: They are blocks of code that perform a specific task. Function declarations specify the function's return type, name, and possible parameters. The syntax for function declaration is return_type function_name(parameters);.
 
 - Arrays: They are used to store multiple values of the same data type in contiguous memory locations. The syntax for array declaration is datatype array_name[size];.
+
+- Escape Sequences: They are used to represent special characters within strings: \a for the alert (bell) character, \\ for the backslash, \b for backspace, \? for the question mark, \f for form feed, \' for single quote, \n for newline, \" for double quote, \r for carriage return, \ooo for an octal number where ooo represents octal digits, \t for horizontal tab, \xhh for a hexadecimal number where hh represents hexadecimal digits, and \v for vertical tab. 
 
 ##############################################################################################################################
 
@@ -134,6 +137,24 @@ int product = a * b;    // Multiplication
 int quotient = a / b;   // Division
 int remainder = a % b;  // Modulus
 int result = (a + b) * (a - b);  // Arithmetic expressions can also include parentheses like in maths
+
+* Variable Type Conversion:
+
+EX:
+
+Implicit Type Conversion:
+int a = 5;
+float b = 2.5;
+float result = a + b; 
+In this example, the integer variable a is implicitly converted to a float when it is added to the float variable b.
+
+Explicit Type Conversion (Casting):
+int x = 10;
+int y = 3;
+float division_result = (float)x / y; 
+
+N.B.:
+During type Conversion, there may be a loss of precision or unexpected behavior.
 
 ------------------------------------------------------------------------------------------------------------------------------
 * The For and While statements:
@@ -180,7 +201,7 @@ N.B.:
 The standard library's input and output model is determined: text input or output, regardless of its source or destination, is treated as streams of characters. Each stream represents a sequence of characters divided into lines, where each line consists of zero or more characters followed by a newline character. 
 Within the standard library, several functions facilitate reading or writing one character at a time, with getchar and putchar being the simplest. The keyword getchar retrieves the next input character from a text stream each time it's called, while putchar prints a character whenever it's invoked. 
 
-- File Copying and Character Counting
+- Character Counting and Copying
 
 With just getchar and putchar, a program can effectively copy its input to output character by character until it encounters an end-of-file indicator. The putchar(c) function is a standard C function that is used to output a single character to the standard output (usually the terminal). The function getchar() is another standard C library function used to read a single character from the standard input (usually the keyboard) and return its ASCII value as an integer. 
 
@@ -195,7 +216,7 @@ EX: Program that counts characters in input
 4.  long nc;
 5.  nc = 0;
 6.  while (getchar() != EOF){
-7.  ++nc;
+7.  ++nc; // use ++ to add 1, and -- to substract 1
 8.  printf("%ld\n", nc);
 9.  }
 10. return 0;
@@ -214,7 +235,7 @@ EX: Program that counts the number of lines in input
 5.  while ((c = getchar()) != EOF) {
 6.  putchar(c);
 7.  if (c == '\n') { // If newline character is encountered
-8.  line_count++; // add 1 to  line_count variable, use ++ to add 1
+8.  line_count++; // add 1 to  line_count variable
 9.  }
 10. }
 11. }
