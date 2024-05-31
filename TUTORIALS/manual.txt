@@ -364,43 +364,152 @@ EX: Program that print the longest line with an external variable, but without a
 5.  char longest_line[MAXLINE];
 6.  int read_line(void);
 7.  void duplicate(void);
-8.  main()
-9.  {
-10. int length;
-11. extern int maximum;
-12. extern char longest_line[];
-13. }
-14. maximum = 0;
-15. while ((length = read_line()) > 0)
-16. if (length > maximum) {
-17. maximum = length;
-18. duplicate();
+8.  int main() {
+9.  int length;
+10. maximum = 0;
+11. while ((length = read_line()) > 0) {
+12. if (length > maximum) {    
+13. maximum = length;    
+14. duplicate();    
+15. }       
+16. }            
+17. if (maximum > 0) {            
+18. printf("%s", longest_line);        
+19. }    
+20. return 0;    
+21. }        
+22. int read_line(void) {    
+23. int character, index;    
+24. for (index = 0; index < MAXLINE - 1 && (character = getchar()) != EOF && character != '\n'; ++index) {
+25. input[index] = character;
+26. }
+27. if (character == '\n') {    
+28. input[index] = character;    
+29. ++index;        
+30. }    
+31. input[index] = '\0';   
+32. return index;        
+33. }        
+34. void duplicate(void) {    
+35. int index;    
+36. for (index = 0; (longest_line[index] = input[index]) != '\0'; ++index) {    
+
+##############################################################################################################################
+
+* Conditional Expressions
+
+A conditional expression (ternary operator) is a way to return one of 2 values depending on whether a condition is met, with a simple syntax (the_condition ? expression_1 : expression_2;). There are 2 main types of conditional expression, if-else and else-if.
+
+- If-else
+
+The if-else statement is an expression that determines whether a condition holds true or false, it has two blocks. If the condition is true, the code block inside the if statement is executed. Otherwise, the code block inside the else statement is executed. Its syntax is:
+if (condition) {
+    // Block to be executed if the condition is true
+} else {
+    // Block to be executed if the condition is false
+}
+
+- Else-if
+
+Else-if ladder allows for multiple conditions to be checked in sequence, with the following syntax:
+if (condition1) {
+    // Block of code to be executed if condition1 is true
+} else if (condition2) {
+    // Block of code to be executed if condition2 is true
+} else if (condition3) {
+    // Block of code to be executed if condition3 is true
+}
+// Optionally, an else block can be added at the end to handle the case where none of the conditions are true.
+else {
+    // Block of code to be executed if none of the conditions are true
+}
+
+EX: Dumb code showing how if, else, and else if work
+
+1.  #include <stdio.h>
+2.  int main() {
+3.  int num;
+4.  printf("Enter an integer: ");
+5.  scanf("%d", &num);
+6.  if (num % 2 == 0) {
+7.  printf("The number is even (using only if).\n");
+8.  } else {
+9.  printf("The number is odd (using only if).\n");
+10. }
+11. if (num % 2 == 0) {
+12. printf("The number is divisible by 2 (using else-if).\n");
+13. } else if (num % 5 == 0) {
+14. printf("The number is divisible by 5 (using else-if).\n");
+15. } else {
+16. printf("The number is not divisible by 2 or 5 (using else-if).\n");
+17. }
+18. return 0;
 19. }
-20. if (maximum > 0)
-21. printf("%s", longest_line);
-22. return 0;
-23. int read_line(void)
-24. {
-25. int character, index;
-26. extern char input[];
-27. }
-28. for (index = 0; index < MAXLINE - 1
-29. && (character=getchar)) != EOF && character != '\n'; ++index)
-30. input[index] = character;
-31. if (character == '\n') {
-32. input[index] = character;
-33. ++index;
-34. }
-35. input[index] = '\0';
-36. return index;
-37. void duplicate(void)
-38. {
-39. int index;
-40. extern char input[], longest_line[];
-41. }
-42. index = 0;
-43. while ((longest_line[index] = input[index]) != '\0')
-44. ++index;
+
+* Operator Associativity
+
+It determines the order in which operators of the same precedence level are evaluated, 5 + 6 - 2; means (5 + 6) - 2 while 5 + 6 * 2 means 5 + (6 * 2). Best Practices, Google-like coding requirements, are not presumptuous rules. The goal is not to be fancy, but to write good code. 
+So, avoid Undefined Behavior by not changing the same variable multiple times within a single expression without a sequence point, like (,) or (;) or (&&).
+And use parentheses to explicitly specify the order of evaluation when the expression might be ambiguous, better be late than sorry with thousands of lines to check. Here are some hypothetical mistakes:
+
+- Function Calls: The compiler can choose to evaluate either foo() or bar() first, and mess with the result
+
+int foo() {
+    printf("Inside foo()\n");
+    return 5;
+}
+int bar() {
+    printf("Inside bar()\n");
+    return 10;
+}
+int main() {
+    int result = foo() + bar();
+    return 0;
+}
+In this example, the order of evaluation of foo() and bar() is not specified.  Therefore, the output could be "Inside foo()\nInside bar()\n" or "Inside bar()\nInside foo()\n", depending on the compiler's choice.
+
+- Logical Operators: The (&&) operator has short-circuit behavior, if (a > b) is false than (b > c) is not even tested
+
+int a = 5, b = 10, c = 15;
+int result = (a > b) && (b > c);
+
+- Undefined Behavior: No sequence points will lead to unpredictable behavior
+int x = 5;
+int y = x++ * ++x;
+
+* The Switch Statement, and Break 
+
+- It's a testing keyword for making multi-way decisions, it does so by comparing an expression to a set of constant integer values and branching accordingly. 
+When the expression matches one of these cases, the program execution starts from that point. It's important to note that all case expressions must be distinct. As for the optional default case, it's for when no other cases match the expression value. 
+
+- The break statement is a control flow statement used to exit immediately from loops and switch statements. It is primarily used to terminate the current iteration of a loop or to exit a switch statement after a particular case has been executed.
+NB: It's advisable to include a break statement after the last case, for defense.
+
+In a switch statement, the break statement is used to exit immediately from the switch block. This prevents the execution from falling through to the next case. If no break statement is encountered, the program will continue executing the code in the subsequent cases, leading to fall-through behavior.
+
+EX: Dumb code to tell the name of the week day, with Monday as the first one 
+
+1.  #include <stdio.h>
+2.  int main() {
+3.  int day;
+4.  printf("Enter a number (1-7): ");
+5.  scanf("%d", &day);
+6.  switch (day) {
+7.  case 1: printf("Monday\n"); break; // Here is a compact way to code putting several instruction line in one with (;)
+8.  case 2: printf("Tuesday\n"); break;
+9.  case 3: printf("Wednesday\n"); break;
+10. case 4: printf("Thursday\n"); break;
+11. case 5: printf("Friday\n"); break;
+12. case 6: printf("Saturday\n"); break;w 
+13. case 7: // Here is the regular way to write it
+14. printf("Sunday\n"); 
+15. break;
+16. default: printf("Invalid input\n"); break;
+17. }
+18. return 0;
+19. }
+
+
 
 ------------------------------------------------------------------------------------------------------------------------------
 
