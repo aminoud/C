@@ -477,7 +477,7 @@ int result = (a > b) && (b > c);
 int x = 5;
 int y = x++ * ++x;
 
-* The Switch Statement, and Break 
+* The Switch Statement, Break, and Continue 
 
 - It's a testing keyword for making multi-way decisions, it does so by comparing an expression to a set of constant integer values and branching accordingly. 
 When the expression matches one of these cases, the program execution starts from that point. It's important to note that all case expressions must be distinct. As for the optional default case, it's for when no other cases match the expression value. 
@@ -485,7 +485,11 @@ When the expression matches one of these cases, the program execution starts fro
 - The break statement is a control flow statement used to exit immediately from loops and switch statements. It is primarily used to terminate the current iteration of a loop or to exit a switch statement after a particular case has been executed.
 NB: It's advisable to include a break statement after the last case, for defense.
 
-In a switch statement, the break statement is used to exit immediately from the switch block. This prevents the execution from falling through to the next case. If no break statement is encountered, the program will continue executing the code in the subsequent cases, leading to fall-through behavior.
+- In a switch statement, the break statement is used to exit immediately from the switch block. This prevents the execution from falling through to the next case. If no break statement is encountered, the program will continue executing the code in the subsequent cases, leading to fall-through behavior.
+
+- The continue statement is used inside loops to immediately jump to the next iteration of the loop without executing the remaining code in the loop's body. 
+When encountered, continue causes the program execution to jump directly to the loop's condition check or increment/decrement statement (depending on the loop type), bypassing any remaining statements in the loop's body.
+In a loop, continue is typically used within if statements to control the flow of execution inside the loop based on certain conditions. When a continue statement is encountered, the loop immediately proceeds to the next iteration.
 
 EX: Dumb code to tell the name of the week day, with Monday as the first one 
 
@@ -509,7 +513,63 @@ EX: Dumb code to tell the name of the week day, with Monday as the first one
 18. return 0;
 19. }
 
+* The Do-While, Goto, and Labels
 
+- Do-While is a loop that execute a block of code repeatedly, until a specified condition becomes false. It tests the condition after the loop body executes, which ensure that the loop body run at least once. Its syntax is: 
+do {
+    // Code block to be executed
+} while (condition);
+
+EX: Print the number i, equal to 1 at first, and adding to it 1 each time using a do-while loop until i < or = to 5
+
+1. #include <stdio.h>
+2. int main() {
+3. int i = 1;
+4. do {
+5. printf("%d ", i);
+6. i++;
+7. } while (i <= 5);
+8. return 0;
+9. }
+
+- Goto dates back to the old times, (when Boomers were playing in easy mode, and "nerds" coding in BASIC language). It allows to jump to a desired section of the code, without executing any previous instructions to the said desired section. It relies on labels. They are a way to name code sections easily, just by typing for instance: (dumb_section:).
+
+EX: Same code, but jumping directly to a low-key insult (written for dramatic purposes, not directed to anyone, not even my ex)
+1.  #include <stdio.h>
+2.  int main() {
+3.  int i = 1;
+4.  goto not_today // nothing between here 
+5.  do {
+6.  printf("%d ", i);
+7.  i++;
+8.  } while (i <= 5); // and here will be ran
+9.  not_today:
+10. printf("Not today, punk"); 
+8.  return 0;
+9.  }
+
+* Blocks, Initialisation, Recursion
+
+- In C, you cannot nest function within other functions like in python. Yet, block-level variable scoping allow variables to be defined within blocks that is to say code enclosed within curly braces within a function. 
+Variables declared within a block hide identically named variables in outer blocks, they do so by remaining in existence until the block they're defined in ends.
+Good practice recommended to avoid variable names that conceal names in an outer scope, in order to prevent confusion and errors.
+
+EX: the use of x variables in this code is just ugly
+#include <stdio.h>
+int x = 10; // Global variable
+int main() {
+    int x = 20; // Local variable, hiding the global variable 'x'
+    printf("Local x: %d\n", x); // Prints the value of local 'x'
+    printf("Global x: %d\n", ::x); // Prints the value of global 'x'
+    return 0;
+}
+
+- In Explicit Initialisation, Variables can be initialised when they're defined by following the name with an equals sign and an expression. As for the External and static variables, they are guaranteed to be initialised to zero in the absence of explicit initialisation. Arrays and character arrays have specific initialisation rules, as seen earlier.
+
+- Recursion is supported in C, allowing functions to call themselves either directly or indirectly. Each invocation of a recursively called function gets its own set of automatic variables. 
+Recursion can provide a more compact and often easier-to-understand solution compared to non-recursive alternatives, like old-fashioned trees (or my first codes (╥﹏╥), now buried with IT game cartridges, RIP Atari).
+
+##############################################################################################################################
 
 ------------------------------------------------------------------------------------------------------------------------------
 
