@@ -171,8 +171,8 @@ EX: Program that prints Fahrenheit-Celsius table
 4.  float lower, upper; 
 5.  lower = 0; // You notice that the variable was declared prior to assigning it a value here
 6.  upper = 200;    
-7.  #define steps 10; // #define is used to declare constants    
-8.  fa = lower;
+7.  #define steps 10; // #define is used to declare constants or macro substitution 
+8.  fa = lower;       // Example of macro sub. that replace TIRD(x) by x/3: #define TIRD(x) (x / 3) 
 9.  while (fa <= upper) {
 10. // Conversion happens here
 11. cel = 5.0 * (fa - 32) / 9.0;  
@@ -324,6 +324,7 @@ EX: Dumb Function Code that add two numbers (no need for CTR+D here)
 13. return convergence;
 14. }
 
+------------------------------------------------------------------------------------------------------------------------------
 * External Variables:
 
 - What are they?
@@ -446,6 +447,7 @@ EX: Dumb code showing how if, else, and else if work
 18. return 0;
 19. }
 
+------------------------------------------------------------------------------------------------------------------------------
 * Operator Associativity
 
 It determines the order in which operators of the same precedence level are evaluated, 5 + 6 - 2; means (5 + 6) - 2 while 5 + 6 * 2 means 5 + (6 * 2). Best Practices, Google-like coding requirements, are not presumptuous rules. The goal is not to be fancy, but to write good code. 
@@ -477,6 +479,7 @@ int result = (a > b) && (b > c);
 int x = 5;
 int y = x++ * ++x;
 
+------------------------------------------------------------------------------------------------------------------------------
 * The Switch Statement, Break, and Continue 
 
 - It's a testing keyword for making multi-way decisions, it does so by comparing an expression to a set of constant integer values and branching accordingly. 
@@ -513,6 +516,7 @@ EX: Dumb code to tell the name of the week day, with Monday as the first one
 18. return 0;
 19. }
 
+------------------------------------------------------------------------------------------------------------------------------
 * The Do-While, Goto, and Labels
 
 - Do-While is a loop that execute a block of code repeatedly, until a specified condition becomes false. It tests the condition after the loop body executes, which ensure that the loop body run at least once. Its syntax is: 
@@ -548,6 +552,7 @@ EX: Same code, but jumping directly to a low-key insult (written for dramatic pu
 8.  return 0;
 9.  }
 
+------------------------------------------------------------------------------------------------------------------------------
 * Blocks, Initialisation, Recursion
 
 - In C, you cannot nest function within other functions like in python. Yet, block-level variable scoping allow variables to be defined within blocks that is to say code enclosed within curly braces within a function. 
@@ -570,6 +575,173 @@ int main() {
 Recursion can provide a more compact and often easier-to-understand solution compared to non-recursive alternatives, like old-fashioned trees (or my first codes (╥﹏╥), now buried with IT game cartridges, RIP Atari).
 
 ##############################################################################################################################
+
+* Pointers and Addresses
+
+- Pointers direct towards the exact locations of data, allowing a better memory management. Memory is like a vast array of cells, each with its unique address. These cells can be arranged in various configurations, from individual bytes to groups forming integers or longer entities.
+
+- A pointer is like a GPS coordinate, holding the precise location of a variable. For instance, if (a) is a character and (p) is its  pointer, we visualize it like this with (&) and (*) operators:
+
+char a;
+char *p = &a; // The & operator fetches the address of a, assigning it to the pointer p (*p). 
+int x = 42;
+int *ptr = &x;
+int value = *ptr; // Value is now 42, retrieved from the treasure chest pointed to by ptr.
+
+N.B.: & can only fetch addresses of tangible objects in memory, not abstract entities or fleeting expressions.
+
+------------------------------------------------------------------------------------------------------------------------------
+* Pointers and Function Arguments
+
+- C doesn't allow a called function to change a variable while in the calling function, making the following code illegal and non-functional:
+
+1.  #include <stdio.h>
+2.  void increment(int x, int amount) {
+3.  x += amount;
+4.  }
+5.  int main() {
+6.  int a = 5;
+7.  increment(a, 3);
+8.  printf("a = %d\n", a);  // The output will be a = 5 :/
+9.  return 0;
+10. }
+
+- The increment function attempts to add amount to x. However, since x is a copy of the variable passed from the calling function, the original variable is not modified. To solve this problem, we can use macro-substitution with #define: so that the INCREMENT macro directly manipulates the original variable, effectively incrementing its value.
+
+EX: Fixed code with macro-substitution 
+
+1.  #include <stdio.h>
+2.  #define INCREMENT(x, amount) \
+3.  do { \
+4.  (x) += (amount); \
+5.  } while (0)
+6.  int main() {
+7.  int a = 5;
+8.  INCREMENT(a, 3);
+9.  printf("a = %d\n", a);  // Here the output will be a = 8 :)
+10. return 0;
+11. }
+
+- The other way to fix is more elegant, it requires pointers. By passing a pointer to the variable, the function can modify the original variable in the calling function. Inside the function, the pointer is dereferenced (*x) to access and modify the value it points to: 
+
+1.  #include <stdio.h>
+2.  void increment(int *x, int amount) {
+3.  *x += amount;
+4.  }
+5.  int main() {
+6.  int a = 5;
+7.  increment(&a, 3);
+8.  printf("a = %d\n", a);  // // Here the output will also be a = 8 :)
+9.  return 0;
+10. }
+
+------------------------------------------------------------------------------------------------------------------------------
+* Pointers and Arrays
+
+Pointers allow efficient traversal of an array. Instead of using array indexing, you can increment a pointer to move to the next element in the array. The following example demonstrates array manipulation and function parameter passing, with: 
+
+The array int b[10] is declared, and the pointer int *pb is initialized, and pb = b sets pb to the address of the first element. 
+The array is initialized using pointer arithmetic: pb[i] = i * 2; is equivalent to b[i] = i * 2;. 
+The array elements are printed using both array indexing (b[i]) and pointer arithmetic (*(pb + i)).
+
+The function displayArray prints the elements of the array using pointer arithmetic. 
+The function stringLength calculates the length of a string using pointer incrementing (str++).
+
+1.  #include <stdio.h>
+2.  void displayArray(int *arr, int size) {
+3.  for (int *ptr = arr; ptr < arr + size; ptr++) {
+4.  printf("%d ", *ptr);
+5.  }
+6.  printf("\n");
+7.  }
+8.  int stringLength(const char *str) {
+9.  const char *start = str;
+10. while (*str) str++;
+11. return str - start;
+12. }
+13. int main() {
+14. int b[10], *pb = b;
+15. for (int i = 0; i < 10; i++) {
+16. pb[i] = i * 2;
+17. }
+18. printf("Using array indexing:\n");
+19. for (int i = 0; i < 10; i++) {
+20. printf("%d ", b[i]);
+21. }
+22. printf("\n");
+23. printf("Using pointer arithmetic:\n");
+24. for (int i = 0; i < 10; i++) {
+25. printf("%d ", *(pb + i));
+26. }
+27. printf("\n");
+28. for (int i = 2; i < 7; i++) {
+29. pb[i] += 10;
+30. }
+31. displayArray(b, 10);
+32. const char *text = "Hello, world!";
+33. printf("Length of the string \"%s\": %d\n", text, stringLength(text));
+34. return 0;
+35. }
+
+------------------------------------------------------------------------------------------------------------------------------
+* Address Arithmetic 
+
+- If p is a pointer to an element in an array, then p++ increments p to point to the next element, and p+=i increments it to point i elements beyond its current position. Storage allocator requires routines: alloc(n) returns a pointer to n consecutive characters, and afree(p) releases the storage so it can be reused. These routines operate as a stack (last-in, first-out).
+
+- The standard library functions malloc and free perform similar tasks without such restrictions. A pointer can be initialized just like any other variable. For instance, static char *allocp = allocbuf; defines allocp as a character pointer and initializes it to point to the beginning of allocbuf.
+
+- Pointer arithmetic includes adding or subtracting integers to/from pointers, comparing pointers, and pointer subtraction to find the number of elements between two pointers. 
+
+EX: Dumb code illustrating routines by printing the length of a string
+
+#include <stdio.h>
+
+#define ALLOCSIZE 10000 // This number of bytes is symbolic, and define memory allocation 
+static char allocbuf[ALLOCSIZE]; // A much lower value would severely limit the amount of memory and could lead to issues
+static char *allocp = allocbuf;
+
+char *alloc(int n) { if (allocbuf + ALLOCSIZE - allocp >= n) { allocp += n; return allocp - n; } else { return 0; } }
+void afree(char *p) { if (p >= allocbuf && p < allocbuf + ALLOCSIZE) { allocp = p; } }
+int strLength(const char *s) { const char *p = s; while (*p != '\0') p++; return p - s; }
+
+void exampleArrayPointer() { int a[10], *pa = a; for (int i = 0; i < 10; i++) { pa[i] = i * 2; } for (int i = 0; i < 10; i++) { printf("%d ", a[i]); } printf("\n"); for (int i = 0; i < 10; i++) { printf("%d ", *(pa + i)); } printf("\n"); }
+
+int main() { exampleArrayPointer(); char *p1 = alloc(50); char *p2 = alloc(100); afree(p2); char *p3 = alloc(30); const char *str = "Hello, world!"; printf("Length of \"%s\": %d\n", str, strLength(str)); return 0; }
+
+------------------------------------------------------------------------------------------------------------------------------
+* Character Pointers and Functions 
+
+- Strings are typically represented as arrays of characters terminated by a null character '\0'. When using string constants in a program, they are accessed through a character pointer. For example, printf("hello, world\n"); receives a pointer to the beginning of the character array "hello, world\n".
+
+- String constants can also be explicitly assigned to character pointers. For instance, char *pmessage = "now is the time"; assigns pmessage to point to the character array "now is the time". It's important to note that this assignment only sets the pointer to the (read only) memory location of the string constant, not the string itself.
+
+- There's a significant distinction between declaring a character array and a character pointer for strings. An array declaration like char amessage[] = "now is the time"; creates a mutable array that holds the string's contents. On the other hand, char *pmessage = "now is the time"; initializes pmessage as a pointer to the read-only string constant.
+
+EX: Dumb code demonstrating how pointer arithmetic can efficiently access and modify string data
+
+/* strcpy: copy string t to s using pointer notation */
+void strcpy(char *s, char *t) {
+while ((*s++ = *t++) != '\0')
+;
+}
+/* strcmp: compare strings s and t using pointer notation */
+int strcmp(char *s, char *t) {
+for ( ; *s == *t; s++, t++)
+if (*s == '\0')
+return 0;
+return *s - *t;
+}
+int main() {
+char dest[20]; // Destination array for strcpy
+char *str1 = "Hello"; char *str2 = "World";
+strcpy(dest, str1); printf("Copied string: %s\n", dest); // Copy str1 to dest and print it
+int cmp_result = strcmp(str1, str2); printf("Comparison result: %d\n", cmp_result); // Compare str1 and str2 and print it 
+return 0;
+}
+
+##############################################################################################################################
+
+* Pointers to Pointers
 
 ------------------------------------------------------------------------------------------------------------------------------
 
