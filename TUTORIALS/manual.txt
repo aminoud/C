@@ -580,7 +580,7 @@ Recursion can provide a more compact and often easier-to-understand solution com
 
 - Pointers direct towards the exact locations of data, allowing a better memory management. Memory is like a vast array of cells, each with its unique address. These cells can be arranged in various configurations, from individual bytes to groups forming integers or longer entities.
 
-- A pointer is like a GPS coordinate, holding the precise location of a variable. For instance, if (a) is a character and (p) is its  pointer, we visualize it like this with (&) and (*) operators:
+- A pointer is like a GPS coordinate, holding the precise location of a variable. For instance, if (a) is a character and (p) is its  pointer, we visualise it like this with (&) and (*) operators:
 
 char a;
 char *p = &a; // The & operator fetches the address of a, assigning it to the pointer p (*p). 
@@ -593,7 +593,7 @@ N.B.: & can only fetch addresses of tangible objects in memory, not abstract ent
 ------------------------------------------------------------------------------------------------------------------------------
 * Pointers and Function Arguments
 
-- C doesn't allow a called function to change a variable while in the calling function, making the following code illegal and non-functional:
+C doesn't allow a called function to change a variable while in the calling function, making the following code illegal and non-functional:
 
 1.  #include <stdio.h>
 2.  void increment(int x, int amount) {
@@ -640,8 +640,8 @@ EX: Fixed code with macro-substitution
 
 Pointers allow efficient traversal of an array. Instead of using array indexing, you can increment a pointer to move to the next element in the array. The following example demonstrates array manipulation and function parameter passing, with: 
 
-The array int b[10] is declared, and the pointer int *pb is initialized, and pb = b sets pb to the address of the first element. 
-The array is initialized using pointer arithmetic: pb[i] = i * 2; is equivalent to b[i] = i * 2;. 
+The array int b[10] is declared, and the pointer int *pb is initialised, and pb = b sets pb to the address of the first element. 
+The array is initialised using pointer arithmetic: pb[i] = i * 2; is equivalent to b[i] = i * 2;. 
 The array elements are printed using both array indexing (b[i]) and pointer arithmetic (*(pb + i)).
 
 The function displayArray prints the elements of the array using pointer arithmetic. 
@@ -688,7 +688,7 @@ The function stringLength calculates the length of a string using pointer increm
 
 - If p is a pointer to an element in an array, then p++ increments p to point to the next element, and p+=i increments it to point i elements beyond its current position. Storage allocator requires routines: alloc(n) returns a pointer to n consecutive characters, and afree(p) releases the storage so it can be reused. These routines operate as a stack (last-in, first-out).
 
-- The standard library functions malloc and free perform similar tasks without such restrictions. A pointer can be initialized just like any other variable. For instance, static char *allocp = allocbuf; defines allocp as a character pointer and initializes it to point to the beginning of allocbuf.
+- The standard library functions malloc and free perform similar tasks without such restrictions. A pointer can be initialised just like any other variable. For instance, static char *allocp = allocbuf; defines allocp as a character pointer and initializes it to point to the beginning of allocbuf.
 
 - Pointer arithmetic includes adding or subtracting integers to/from pointers, comparing pointers, and pointer subtraction to find the number of elements between two pointers. 
 
@@ -715,7 +715,7 @@ int main() { exampleArrayPointer(); char *p1 = alloc(50); char *p2 = alloc(100);
 
 - String constants can also be explicitly assigned to character pointers. For instance, char *pmessage = "now is the time"; assigns pmessage to point to the character array "now is the time". It's important to note that this assignment only sets the pointer to the (read only) memory location of the string constant, not the string itself.
 
-- There's a significant distinction between declaring a character array and a character pointer for strings. An array declaration like char amessage[] = "now is the time"; creates a mutable array that holds the string's contents. On the other hand, char *pmessage = "now is the time"; initializes pmessage as a pointer to the read-only string constant.
+- There's a significant distinction between declaring a character array and a character pointer for strings. An array declaration like char amessage[] = "now is the time"; creates a mutable array that holds the string's contents. On the other hand, char *pmessage = "now is the time"; initialises pmessage as a pointer to the read-only string constant.
 
 EX: Dumb code demonstrating how pointer arithmetic can efficiently access and modify string data
 
@@ -743,6 +743,320 @@ return 0;
 
 * Pointers to Pointers
 
+- Pointers can be stored in arrays, enabling powerful and flexible data structures. To sort lines of text by alphabetic order, an array of pointers to strings can be used. This approach efficiently handles variable-length text lines, as each line can be accessed via a pointer to its first character, with only pointers swapped instead of the actual text lines.
+
+- The sorting process involves three steps: reading input lines, sorting them, and printing them in order. The input routine collects and saves each line's characters, building an array of pointers to these lines. 
+
+- The core of this approach is the array of pointers. The input lines are stored end-to-end in a single character array, with each line accessible via a pointer. Sorting algorithms like quicksort can be adapted to work with these pointers, using functions like strcmp for comparisons and swapping pointers instead of text lines to minimise overhead.
+
+Ex: Quicksort code sorting inputed lines alphabetically from z to a
+
+1.  #include <stdio.h>  // Standard I/O functions
+2.  #include <stdlib.h>  // Standard library functions
+3.  #include <string.h>  // String handling functions
+
+4.  #define MAXITEMS 5000  // Maximum number of items
+5.  char *items[MAXITEMS];  // Array to store item pointers
+
+6.  int readitems(char *items[], int maxitems);  // Function to read items
+7.  void writeitems(char *items[], int nitems);  // Function to write items
+8.  void sort(char *items[], int left, int right);  // Function to sort items
+
+9.  int main() {
+10. int nitems;
+11. if ((nitems = readitems(items, MAXITEMS)) >= 0) {  // Read items
+12. sort(items, 0, nitems-1); writeitems(items, nitems); return 0;  
+13. } else {
+14. printf("error: input too big to sort\n"); return 1;  
+15. }
+16. }
+
+17: #define MAXLEN 1000  // Maximum length of input line
+18: int getinput(char *, int);  
+19: char *allocate(int);  // Function to allocate memory
+
+20: int readitems(char *items[], int maxitems) {
+21: int len, nitems;
+22: char *p, line[MAXLEN];
+23: nitems = 0;
+24: while ((len = getinput(line, MAXLEN)) > 0) {  // Get input line
+25: if (nitems >= maxitems || (p = allocate(len)) == NULL)  // Check limits
+26: return -1; // we will see error handling later
+27: else {
+28: line[len-1] = '\0';  // Remove newline
+29: strcpy(p, line);  // Copy line to allocated memory
+30: items[nitems++] = p;  // Store pointer
+31: }
+32: }
+33: return nitems;  // Return number of items read
+34: }
+
+35: void writeitems(char *items[], int nitems) {
+36: while (nitems-- > 0) printf("%s\n", *items++);  // Print each item
+37: }
+
+38: void sort(char *v[], int left, int right) {
+39: int i, last;
+40: void exchange(char *v[], int i, int j);  // Function to exchange elements
+41: if (left >= right) return;  // Base case
+42: exchange(v, left, (left + right)/2);  // Move pivot element
+43: last = left;
+44: for (i = left+1; i <= right; i++)  // Partition
+45: if (strcmp(v[i], v[left]) > 0) exchange(v, ++last, i);  // Exchange
+46: exchange(v, left, last);  // Restore pivot
+47: sort(v, left, last-1);  // Sort left part
+48: sort(v, last+1, right);  // Sort right part
+49: }
+
+50: void exchange(char *v[], int i, int j) {
+51: char *temp = v[i]; v[i] = v[j]; v[j] = temp;  // Swap elements
+52: }
+
+53: int getinput(char *s, int lim) {
+54: int c, i;
+55: for (i = 0; i < lim-1 && (c = getchar()) != EOF && c != '\n'; i++) s[i] = c;  // Read line
+56: if (c == '\n') { s[i] = c; i++; }  // Append newline
+57: s[i] = '\0';  // Null terminate
+58: return i;  // Return length
+59: }
+
+60: #define ALLOCSIZE 10000  // Size of allocation buffer
+61: static char allocbuf[ALLOCSIZE];  // Buffer for allocations
+62: static char *allocp = allocbuf;  // Next free position
+
+63: char *allocate(int n) {
+64: if (allocbuf + ALLOCSIZE - allocp >= n) {  // Check space
+65: allocp += n;  // Move pointer
+66: return allocp - n;  // Return start of allocated memory
+67: } else
+68: return 0;  // No space left
+69: }
+
+------------------------------------------------------------------------------------------------------------------------------
+* Multi-dimensional Arrays
+
+- They are often implemented using arrays of arrays rather than as rectangular multi-dimensional arrays. This approach is demonstrated in functions like student_average and highest_grade, which manage student grades across subjects. These functions utilise a two-dimensional array grades to store grades for each student and each subject, enabling efficient data manipulation.
+
+- The Data is represented as follow: the grades array is defined as int grades[NUM_STUDENTS][NUM_SUBJECTS], where rows represent students and columns represent subjects. The Functions to define for this example could be compute_average** that computes the average grade for a specified student index, and find_highest_grade that identifies the highest grade in a subject index. 
+
+- The grades array allows direct access to student grades, optimising operations like average computation and finding maximum values. The array notation (grades[i][j]) allow access to the elements efficiently, by student and by subject indices. When passing grades to functions, its declaration specifies both dimensions (int grades[NUM_STUDENTS][NUM_SUBJECTS]). 
+
+- Parameter Passing is possible: Function declarations for grades include options like f(int grades[NUM_STUDENTS][NUM_SUBJECTS]), f(int grades[][NUM_SUBJECTS]), or f(int (*grades)[NUM_SUBJECTS]), indicating the structure of the array being passed.
+
+EX: Code that compute student grade averages and find highest subject grades 
+
+ 1. #include <stdio.h>
+ 2. #define NUM_STUDENTS 5
+ 3. #define NUM_SUBJECTS 3
+ 4. double compute_average(int grades[NUM_STUDENTS][NUM_SUBJECTS], int student_index);
+ 5. int find_highest_grade(int grades[NUM_STUDENTS][NUM_SUBJECTS], int subject_index);
+ 6. int main() {
+ 7. int grades[NUM_STUDENTS][NUM_SUBJECTS] = {{85, 90, 88}, {70, 65, 75}, {95, 92, 88}, {60, 55, 70}, {80, 85, 82}};
+ 8. int student_index = 2;
+ 9. double average_grade = compute_average(grades, student_index);
+10. printf("Average grade for student %d: %.2f\n", student_index + 1, average_grade);
+11. int subject_index = 1;
+12. int highest_grade = find_highest_grade(grades, subject_index);
+13. printf("Highest grade in subject %d: %d\n", subject_index + 1, highest_grade);
+14. return 0;
+15. }
+16. double compute_average(int grades[NUM_STUDENTS][NUM_SUBJECTS], int student_index) {
+17. double sum = 0.0;
+18. for (int j = 0; j < NUM_SUBJECTS; j++) {
+19. sum += grades[student_index][j];
+20. }
+21. return sum / NUM_SUBJECTS;
+22. }
+23. int find_highest_grade(int grades[NUM_STUDENTS][NUM_SUBJECTS], int subject_index) {
+24. int max_grade = grades[0][subject_index];
+25. for (int i = 1; i < NUM_STUDENTS; i++) {
+26. if (grades[i][subject_index] > max_grade) {
+27. max_grade = grades[i][subject_index];
+28. }
+29. }
+30. return max_grade;
+31. }
+
+Keep in mind that, by opposition to arrays, accessing a pointer element requires two steps: first accessing an array of pointers, then accessing a specific element within the pointed array.
+
+------------------------------------------------------------------------------------------------------------------------------
+* Command-line Arguments
+
+- In C language, you can give command-line arguments to a program when it starts. The main function receives two parameters: argc (argument count) that is the number of command-line arguments, and argv (argument vector) which is an array of character strings representing the arguments.
+
+- The argument argc is at least 1 because argv[0] is the program name, and argv[1] to argv[argc-1] are the additional arguments. As for argv[argc], it is always a NULL pointer. You can manipulate argv directly, ++argv shifts the pointer to the next argument. Options like -x that exclude matching lines and -n that Print line numbers are supported, as well as combining options like -nx.
+
+- Getline Function can read a line from the standard input and returns its length. If fgets returns NULL, it means the end of input has been reached, and the function returns 0. For instance, find pattern prints lines that contain pattern, find -x pattern prints lines that do not contain pattern, find -n pattern prints lines that contain pattern, preceded by their line numbers.
+
+EX: Code with command line Optional Arguments Changes 
+
+1.  #include <stdio.h>
+2.  #include <string.h>
+3.  #define MAXLINE 1000
+4.  int get_line(char *line, int max);
+5.  int main(int argc, char *argv[]) {
+6.  char line[MAXLINE];
+7.  long lineno = 0;
+8.  int c, except = 0, number = 0, found = 0;
+9.  argv[0] = "new_program_name";
+10. while (--argc > 0 && (*++argv)[0] == '-') {
+11. while ((c = *++argv[0])) {
+12. switch (c) {
+13. case 'x': except = 1; break;
+14. case 'n': number = 1; break;
+15. default:
+16. printf("find: illegal option %c\n", c);
+17. argc = 0;
+18. found = -1;
+19. break;
+20. }
+21. }
+22. }
+23. if (argc != 1) {
+24. printf("Usage: find -x -n pattern\n");
+25. } else {
+26. printf("Enter lines (press Enter to exit):\n");
+27. while (get_line(line, MAXLINE) > 0) {
+28. lineno++;
+29. if ((strstr(line, *argv) != NULL) != except) {
+30. if (number) {
+31. printf("%ld:", lineno);
+32. }
+33. printf("%s", line);
+34. found++;
+35. }
+36. }
+37. }
+38. printf("Press Enter to exit...");
+39. while (getchar() != '\n') {
+40. }
+41. return found;
+42. }
+43. int get_line(char *line, int max) {
+44. if (fgets(line, max, stdin) == NULL) {
+45. return 0;
+46. } else {
+47. return strlen(line);
+48. }
+49. }
+
+Note that changing the program's name on system monitor or htop (top if ur insane) requires system-specific calls, :/ that are not mentioned in this textbook.  
+
+------------------------------------------------------------------------------------------------------------------------------
+*Pointers to Functions 
+
+Here are the 3 tools to define pointers to functions: qsort is a standard library function in C used for sorting arrays, strcmp compares two null-terminated strings, and numcmp is a custom comparison function for sorting numeric strings.
+
+QSORT: void qsort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *));
+base = Pointer to the first element of the array to be sorted.
+nmemb = Number of elements in the array.
+size = Size of each element in the array (in bytes).
+compar = Pointer to a comparison function that determines the order of elements.
+
+STRCMP: int strcmp(const char *str1, const char *str2);
+It returns an integer less than, equal to, or greater than zero if str1 is found, respectively, to be less than, to match, or be greater than str2.
+
+NUMCMP: Converts string representations of numbers (s1 and s2) to double, then compares them numerically.
+
+EX: Sorting Strings Lexicographically and Numerically using qsort 
+
+1.  #include <stdio.h>
+2.  #include <stdlib.h>
+3.  #include <string.h>
+4.  #define MAX_STRINGS 5
+5.  int compare_lexicographic(const void *a, const void *b) {
+6.  const char *str1 = *(const char **)a;
+7.  const char *str2 = *(const char **)b;
+8.  return strcmp(str1, str2);
+9.  }
+10. int numcmp(const char *s1, const char *s2) {
+11. double v1 = atof(s1);
+12. double v2 = atof(s2);
+13. if (v1 < v2) return -1;
+14. else if (v1 > v2) return 1;
+15. else return 0;
+16. }
+17. int compare_numeric(const void *a, const void *b) {
+18. const char *str1 = *(const char **)a;
+19. const char *str2 = *(const char **)b;
+20. return numcmp(str1, str2);
+21. }
+22. int main() {
+23. char *strings[MAX_STRINGS] = {"42", "3.14", "99", "100", "25"};
+24. qsort(strings, MAX_STRINGS, sizeof(char *), compare_lexicographic);
+25. printf("Sorted lexicographically:\n");
+26. for (int i = 0; i < MAX_STRINGS; i++) {
+27. printf("%d. %s\n", i + 1, strings[i]);
+28. }
+29. qsort(strings, MAX_STRINGS, sizeof(char *), compare_numeric);
+30. printf("\nSorted numerically:\n");
+31. for (int i = 0; i < MAX_STRINGS; i++) {
+32. printf("%d. %s\n", i + 1, strings[i]);
+33. }
+34. return 0;
+35. }
+
+------------------------------------------------------------------------------------------------------------------------------
+* Complicated Declarations
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+* GUI Introduction and SDL2
+
+- 
+
+- To create a C program that opens a window and stays open until the user types return, we'll need to use a GUI library. One of the simplest and most widely-used libraries for creating windows in C is SDL (Simple DirectMedia Layer).
+
+Here is how you can do this using the SDL library:
+
+Install SDL if it's not already installed.
+Write the C program that opens a window and waits for the user to press the return key.
+Step 1: Install SDL
+To install SDL on Ubuntu, you can use the following command:
+
+sh
+Copy code
+sudo apt-get install libsdl2-dev
+On macOS, you can use Homebrew:
+
+sh
+Copy code
+brew install sdl2
+On Windows, you need to download the development libraries from the SDL website and set them up in your development environment.
+gcc -o sdl_program sdl_program.c -lSDL2
+
+
+- Explanation
+Initialization: SDL_Init(SDL_INIT_VIDEO) initializes the SDL library for video.
+Create Window: SDL_CreateWindow creates a window.
+Create Renderer: SDL_CreateRenderer creates a renderer for the window.
+Set Draw Color: SDL_SetRenderDrawColor sets the color used for drawing operations (in this case, blue).
+Clear Window: SDL_RenderClear clears the window with the current drawing color.
+Present Window: SDL_RenderPresent updates the window with the current rendering.
+Event Loop: The program enters an infinite loop waiting for events. If the return key (SDLK_RETURN) is pressed, the program exits the loop and cleans up.
+
+EX: Previous program in a GUI window where 
 ------------------------------------------------------------------------------------------------------------------------------
 
 
