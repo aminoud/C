@@ -754,7 +754,7 @@ return 0;
 
 Ex: Quicksort code sorting inputed lines alphabetically from z to a
 
-1.  #include <stdio.h>  // Standard I/O functions
+1.  #include <stdio.h>  // Standard I/O (input/output) functions
 2.  #include <stdlib.h>  // Standard library functions
 3.  #include <string.h>  // String handling functions
 
@@ -1469,8 +1469,148 @@ I see you made it this far, good for u, you've almost got everything in C. Soon 
 
 ##############################################################################################################################
 
-* 
+* Error handling
 
+-It involves strategies and techniques used to detect, handle, and recover from errors that may occur during program execution. Given that C is a low-level programming language, error handling requires careful programming practices. C does not have built-in exception handling mechanisms, so check Return Values, handle Errors Promptly, cleanup Resources, ensure to Log and Debug.
+
+EXAMPLES:
+
+1. Error Detection: Functions often return specific values to indicate success or failure. For instance, memory allocation functions like malloc() return NULL if they fail to allocate memory.
+
+int *ptr = malloc(sizeof(int));
+if (ptr == NULL) {
+}
+
+2. Library Functions: Standard library functions set errno, a global variable, to indicate specific error conditions. This can be checked after calling a function.
+
+FILE *file = fopen("example.txt", "r"); // we'll see that (file handling) right after
+if (file == NULL) {
+    perror("Error opening file");
+}
+
+3. Custom Flags or Variables: Functions may use custom flags or variables to indicate error conditions specific to the application.
+
+int result = custom_function();
+if (result < 0) {
+}
+
+- Here are some Error Handling Techniques examples:
+
+1. Conditional Statements: Use if statements or conditional expressions to check for errors and take appropriate actions.
+
+int result = some_operation();
+if (result < 0) {
+}
+
+2. Error Codes: Functions can return error codes or use global variables to communicate errors back to the caller.
+
+int error_code = function_that_may_fail();
+if (error_code != 0) {
+}
+
+3. Resource Deallocation: Ensure proper cleanup of resources (memory, files, etc.) to prevent leaks.
+
+FILE *file = fopen("example.txt", "r");
+if (file == NULL) {
+    perror("Error opening file");
+} else {
+    fclose(file); 
+}
+
+- Here are some Error Reporting and Logging examples:
+
+1. The perror() Function: It prints a descriptive error message to stderr based on the current value of errno.
+
+FILE *file = fopen("example.txt", "r");
+if (file == NULL) {
+    perror("Error opening file");
+}
+
+2. Custom Logging: Applications may implement custom logging mechanisms to record errors or debug information for analysis.
+
+fprintf(stderr, "Critical error: Could not allocate memory\n");
+
+------------------------------------------------------------------------------------------------------------------------------
+* I/O for files
+
+- It involves using the standard I/O library seen before, <stdio.h>, to open, read, write, and close files. To open a file, you use the fopen() function, which takes the filename and the mode in which to open the file. After you're done with a file, you should close it using the fclose() function to free up resources. The mode specifies the intended operations on the file:
+
+"r" : Open for reading. The file must exist.
+"w" : Open for writing. Creates a new file or truncates an existing file.
+"a" : Open for appending. Data is added to the end of the file.
+"r+": Open for reading and writing. The file must exist.
+"w+": Open for reading and writing. Creates a new file or truncates an existing file.
+"a+": Open for reading and appending. Data is added to the end of the file.
+
+- There are several functions to read and write data from a file:
+
+1. fgetc(): Reads a single character from a file.
+
+int c = fgetc(file);
+if (c == EOF) {
+    // Handle end-of-file or error
+}
+
+2. fgets(): Reads a line of text from a file.
+
+char buffer[100];
+if (fgets(buffer, sizeof(buffer), file) != NULL) {
+    // Process the line
+}
+
+3. fread(): Reads binary data from a file.
+
+size_t result = fread(buffer, sizeof(char), sizeof(buffer), file);
+if (result != expected_size) {
+    // Handle error or end-of-file
+}
+
+4. fputc(): Writes a single character to a file.
+
+if (fputc('A', file) == EOF) {
+    // Handle error
+}
+
+5. fputs(): Writes a string to a file.
+
+if (fputs("Hello, World!\n", file) == EOF) {
+    // Handle error
+}
+
+6. fwrite(): Writes binary data to a file.
+ 
+size_t result = fwrite(buffer, sizeof(char), sizeof(buffer), file);
+if (result != expected_size) {
+    // Handle error
+}
+
+- As we've seen earlier, Error handling is crucial, especially when working with files. Here are some additional techniques:
+
+1. Handling End-of-File: Use the feof() function to check if the end of the file has been reached.
+
+while (!feof(file)) {
+    // Read data
+}
+
+2. Handling File Errors: Use the ferror() function to check if a read/write error occurred.
+
+if (ferror(file)) {
+    perror("File error");
+}
+
+------------------------------------------------------------------------------------------------------------------------------
+* Variable-length Argument Lists
+
+- 
+
+
+------------------------------------------------------------------------------------------------------------------------------
+* Reminders, and other cool functions
+
+-
+
+
+------------------------------------------------------------------------------------------------------------------------------
 * GUI Introduction and SDL2
 
 - 
@@ -1508,8 +1648,9 @@ Event Loop: The program enters an infinite loop waiting for events. If the retur
 EX: Previous program in a GUI window where 
 ------------------------------------------------------------------------------------------------------------------------------
 
+##############################################################################################################################
 
-
+To sum up, 
 
 
 
