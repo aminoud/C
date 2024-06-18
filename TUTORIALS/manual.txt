@@ -1601,42 +1601,116 @@ if (ferror(file)) {
 ------------------------------------------------------------------------------------------------------------------------------
 * Variable-length Argument Lists
 
-- 
+- These argument lists allow a function to accept an indefinite number of arguments. This is commonly used for functions like printf() that need to handle a variable number of arguments. To work with variable-length argument lists, you need to use macros defined in the stdarg.h header file with the following Key Macros:
 
+va_list: A type for iterating over arguments.
+va_start: A macro to initialize a va_list variable.
+va_arg: A macro to retrieve the next argument in the list.
+va_end: A macro to clean up the va_list variable.
+
+- There are 6 steps to Handle Variable-length Arguments:
+
+1. Include the Header: Include the stdarg.h header file.
+2. Declare the Function: Define a function that indicate a variable number of arguments.
+3. Initialize va_list: Use va_list to declare a variable for argument list traversal.
+4. Start Argument Retrieval: Use va_start to initialize the va_list variable.
+5. Access Each Argument: Use va_arg to access each argument in the list.
+6. End Argument Retrieval: Use va_end to clean up.
+
+EX: Code of a simple function that calculates the sum of a variable number of integers
+
+1.  #include <stdio.h>
+2.  #include <stdarg.h>
+3.  int sum(int count, ...) {
+4.  va_list args; 
+5.  int total = 0;
+6.  va_start(args, count);
+7.  for (int i = 0; i < count; i++) {
+8.  total += va_arg(args, int);
+9.  }
+10. va_end(args);
+11. return total;
+12. }
+13. int main() {
+14. printf("Sum of 1, 2, 3: %d\n", sum(3, 1, 2, 3));
+15. printf("Sum of 4, 5, 6, 7: %d\n", sum(4, 4, 5, 6, 7));
+16. printf("Sum of 8, 9: %d\n", sum(2, 8, 9));
+17. return 0;
+18. }
 
 ------------------------------------------------------------------------------------------------------------------------------
 * Reminders, and other cool functions
 
--
+- String Operations: In the following, s and t are char *'s, and c and n are ints.
 
+strcat(s,t):    concatenate t to end of s
+strncat(s,t,n): concatenate n characters of t to end of s
+strcmp(s,t):    return negative, zero, or positive for s < t, s == t, s > t
+strncmp(s,t,n): same as strcmp but only in first n characters
+strcpy(s,t):    copy t to s
+strncpy(s,t,n): copy at most n characters of t to s
+strlen(s):      return length of s148
+strchr(s,c):    return pointer to first c in s, or NULL if not present
+strrchr(s,c):   return pointer to last c in s, or NULL if not present
+
+- Character Class Testing and Conversion: In the following, c is an int that can be represented as an unsigned char or EOF. 
+
+isalpha(c) non-zero if c is alphabetic, 0 if not
+isupper(c) non-zero if c is upper case, 0 if not
+islower(c) non-zero if c is lower case, 0 if not
+isdigit(c) non-zero if c is digit, 0 if not
+isalnum(c) non-zero if isalpha(c) or isdigit(c), 0 if not
+isspace(c) non-zero if c is blank, tab, newline, return, formfeed, vertical tab
+toupper(c) return c converted to upper case
+tolower(c) return c converted to lower case
+
+- Mathematical Functions: There are more than twenty mathematical functions declared in <math.h>. The more frequently used are: 
+
+sin(x):     sine of x, x in radians
+cos(x):     cosine of x, x in radians
+atan2(y,x): arctangent of y/x, in radians
+exp(x):     exponential function ex
+log(x):     natural (base e) logarithm of x (x>0)
+log10(x):   common (base 10) logarithm of x (x>0)
+pow(x,y):   x^y
+sqrt(x):    square root of x (x>0)
+fabs(x):    absolute value of x
+
+N.B.: The random function rand() is defined in the standard library, <stdlib.h>.
 
 ------------------------------------------------------------------------------------------------------------------------------
-* GUI Introduction and SDL2
+* GUI Introduction
 
-- 
+- Creating a Graphical User Interface (GUI) in C involves using a library or framework that provides the necessary tools to create windows, buttons, and other graphical elements. C does not have built-in support for GUIs, so you must rely on external libraries. Among the most common are GTK, Qt, and SDL. 
 
-- To create a C program that opens a window and stays open until the user types return, we'll need to use a GUI library. One of the simplest and most widely-used libraries for creating windows in C is SDL (Simple DirectMedia Layer).
+- Let's use the SDL (Simple DirectMedia Layer), to install it on Ubuntu, you can use the following command: sudo apt-get install libsdl2-dev. On macOS, you can use Homebrew: brew install sdl2. On Windows, you need to download the development libraries from the SDL website and set them up in your development environment.
 
-Here is how you can do this using the SDL library:
+- To compile the code, you need to include SDL by linking it as follow: 
 
-Install SDL if it's not already installed.
-Write the C program that opens a window and waits for the user to press the return key.
-Step 1: Install SDL
-To install SDL on Ubuntu, you can use the following command:
-
-sh
-Copy code
-sudo apt-get install libsdl2-dev
-On macOS, you can use Homebrew:
-
-sh
-Copy code
-brew install sdl2
-On Windows, you need to download the development libraries from the SDL website and set them up in your development environment.
 gcc -o sdl_program sdl_program.c -lSDL2
 
+EX: Program in a GUI window with a blue background and waits for the user to press the Enter key or close the window to exit.
 
-- Explanation
+1. #include <SDL2/SDL.h>
+2. #include <stdio.h>
+3. #define WINDOW_WIDTH 800
+4. #define WINDOW_HEIGHT 600
+5. int main(int argc, char *argv[]) {
+6. if (SDL_Init(SDL_INIT_VIDEO) != 0) {fprintf(stderr, "SDL_Init Error: %s\n", SDL_GetError());return 1;}
+7. SDL_Window *win = SDL_CreateWindow("SDL Window no idea for the name", 100, 100, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+8. if (win == NULL) {fprintf(stderr, "SDL_CreateWindow Error: %s\n", SDL_GetError());SDL_Quit();return 1;}
+9. SDL_Renderer *ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+10. if (ren == NULL) {SDL_DestroyWindow(win);fprintf(stderr, "SDL_CreateRenderer Error: %s\n", SDL_GetError());SDL_Quit();return 1;}
+11. SDL_SetRenderDrawColor(ren, 0, 0, 255, 255);
+12. SDL_RenderClear(ren);
+13. SDL_RenderPresent(ren);
+14. printf("Press Enter to close the window...\n");
+15. while (1) {SDL_Event event;while (SDL_PollEvent(&event)) {if (event.type == SDL_KEYDOWN) {if (event.key.keysym.sym == SDLK_RETURN) {goto cleanup;}} else if (event.type == SDL_QUIT) {goto cleanup;}}}
+16. cleanup:
+17. SDL_DestroyRenderer(ren);SDL_DestroyWindow(win);SDL_Quit();return 0;}
+
+EXPLANATIONS:
+
 Initialisation: SDL_Init(SDL_INIT_VIDEO) initialises the SDL library for video.
 Create Window: SDL_CreateWindow creates a window.
 Create Renderer: SDL_CreateRenderer creates a renderer for the window.
@@ -1645,12 +1719,13 @@ Clear Window: SDL_RenderClear clears the window with the current drawing color.
 Present Window: SDL_RenderPresent updates the window with the current rendering.
 Event Loop: The program enters an infinite loop waiting for events. If the return key (SDLK_RETURN) is pressed, the program exits the loop and cleans up.
 
-EX: Previous program in a GUI window where 
-------------------------------------------------------------------------------------------------------------------------------
-
 ##############################################################################################################################
 
-To sum up, 
+To sum up, you have seen all of the essentials and features of the C language. Now, you can read and write C code with ease. 
+
+Please always refer to Manual references, forums or AI, and remember practice is as much important than knowledge if not even more. 
+
+To improve, I suggest you to learn platform-specific aspects as the UNIX System Interface Low level: it can be useful for coding things as drivers.
 
 
 
