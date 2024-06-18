@@ -90,6 +90,7 @@ C have some other elements fundamental for its syntax:
 - Comments: Comments are used to add explanatory notes within the code. In C, comments can be written in two forms:
 Single-line comments: Begin with // and extend to the end of the line.
 Multi-line comments: Enclosed between /* and */ and can span multiple lines.
+
 EX: Updated Code to print Hello Everyone !!! 
 1. // This is a single line comment, you cant use the line 2 to pursue your explanatory notes
 2. #include <stdio.h>
@@ -99,6 +100,8 @@ EX: Updated Code to print Hello Everyone !!!
 6. printf("Hello Everyone !!!");
 7. return 0;
 8.}
+
+NB: Code will be presented in this fashion all the way through, trying to prevent copy-paste: please type by yourself, OCR and AI abuse will make you lazy. :)
 
 - Identifiers: They are user-defined names used to represent variables, functions, and other entities in the program. Identifiers must follow specific rules:
 A. Must begin with a letter (either uppercase or lowercase) or an underscore (_).
@@ -959,6 +962,7 @@ It returns an integer less than, equal to, or greater than zero if str1 is found
 NUMCMP: Converts string representations of numbers (s1 and s2) to double, then compares them numerically.
 
 EX: Sorting Strings Lexicographically and Numerically using qsort 
+In Lexicography, h (104) is less than n (110) in terms of ASCII values, thus "hello" is less than "no" lexicographically.
 
 1.  #include <stdio.h>
 2.  #include <stdlib.h>
@@ -999,28 +1003,473 @@ EX: Sorting Strings Lexicographically and Numerically using qsort
 ------------------------------------------------------------------------------------------------------------------------------
 * Complicated Declarations
 
+- The C language declaration syntax aims to ensure consistency between declaration and usage, it can be difficult to read and understand for more complex cases. This complexity arises due to the precedence rules of operators like * and (), which require careful use of parentheses to maintain correct association.
+
+- To illustrate the parsing of C declarations, let's create a code that contains various complex declarations and uses of function pointers and arrays of function pointers. It includes a simple function, `simpleFunction`, which takes an integer and returns twice its value. The program declares a function pointer `funcPtr`, an array of five function pointers `arrayOfFuncPtrs`.
+
+- It also contains a pointer to an array of five function pointers `ptrToArrayOfFuncPtrs`, and a function `functionReturningFuncPtr` that returns a function pointer. Additionally, it declares a multidimensional array `arrayOfArraysOfFuncPtrs` consisting of five arrays, each containing ten function pointers. 
+
+EX: Complex C Declarations Involving Pointers to Functions and Arrays of Function Pointers
+
+1. #include <stdio.h>
+2. int simpleFunction(int a) {
+3. return a * 2;
+4. }
+5. int (*funcPtr)(int);
+6. int (*arrayOfFuncPtrs[5])(int);
+7. int (*(*ptrToArrayOfFuncPtrs)[5])(int);
+8. int (*functionReturningFuncPtr(int a))(int) {
+9. return simpleFunction;
+10. }
+11. int (*arrayOfArraysOfFuncPtrs[5][10])(int);
+12. int main() {
+13. funcPtr = simpleFunction;
+14. printf("Result from funcPtr: %d\n", funcPtr(2));
+15. for (int i = 0; i < 5; i++) {
+16. arrayOfFuncPtrs[i] = simpleFunction;
+17. }
+18. printf("Result from arrayOfFuncPtrs[2]: %d\n", arrayOfFuncPtrs[2](3));
+19. ptrToArrayOfFuncPtrs = &arrayOfFuncPtrs;
+20. printf("Result from ptrToArrayOfFuncPtrs[0][3]: %d\n", (*ptrToArrayOfFuncPtrs)[3](4));
+21. int (*returnedFuncPtr)(int) = functionReturningFuncPtr(5);
+22. printf("Result from returnedFuncPtr: %d\n", returnedFuncPtr(6));
+23. for (int i = 0; i < 5; i++) {
+24. for (int j = 0; j < 10; j++) {
+25. arrayOfArraysOfFuncPtrs[i][j] = simpleFunction;
+26. }
+27. }
+28. printf("Result from arrayOfArraysOfFuncPtrs[3][4]: %d\n", arrayOfArraysOfFuncPtrs[3][4](7));
+29. return 0;
+30. }
+
+- Let's highlight as an example a potential area where complexity might have compromised the code: (*funcPtr) declares funcPtr as a pointer to a function that takes an int and returns an int. If not properly parenthesised, it could be misunderstood as a function returning a pointer.
+
+##############################################################################################################################
+
+* Structure and Functions
+
+- Structures, also known as records, are a way to group variables of different types under a single name. They are particularly useful in organising complex data within large programs by treating related variables as a cohesive unit rather than individual entities. For instance, a point in a 4 dimension space:
+
+struct point {
+    float x;
+    float y;
+    float z;
+    int t;
+};
+
+- Structures can also be nested, such as in the case of defining a rectangle using two points:
+
+struct cube {
+    struct point vertices[8];
+};
+
+- Here, struct point defines a type consisting of three floats x, y, and z which represent coordinates and one integer which represent time. Structures can be initialised and accessed using the . operator, like that: 
+
+myCube.vertices[0] = (struct point) {0.0, 0.0, 0.0, 0};
+
+- Operations on structures include copying, assigning, passing to functions, and returning from functions as a unit. Pointers to structures use the -> notation for member access, like follow:
+
+int main() {
+    // Define a pointer to a struct point
+    struct point *pp;
+    // Allocate memory for a struct point
+    pp = (struct point *)malloc(sizeof(struct point));
+
+    // Initialize the members of the struct point using -> notation
+    pp->x = 10.5;
+    pp->y = 20.5;
+    pp->z = 30.5;
+    pp->t = 1;
+
+    // Access and print the members using -> notation
+    printf("Coordinates: x = %f, y = %f, z = %f, t = %d\n", pp->x, pp->y, pp->z, pp->t);
+    // Free allocated memory
+    free(pp);
+    return 0;
+}
+
+EX: Code that initialise a cube vertices through structures and print it vertex at time 0  
+
+ 1. #include <stdio.h>
+ 2. struct point {
+ 3. float x;
+ 4. float y;
+ 5. float z;
+ 6. int t;
+ 7. };
+ 8. struct cube {
+ 9. struct point vertices[8];
+10. };
+11. int main() {
+12. // Define a cube
+13. struct cube myCube;
+14. // Initialize vertices of the cube
+15. myCube.vertices[0] = (struct point) {0.0, 0.0, 0.0, 0};
+16. myCube.vertices[1] = (struct point) {1.0, 0.0, 0.0, 0};
+17. myCube.vertices[2] = (struct point) {1.0, 1.0, 0.0, 0};
+18. myCube.vertices[3] = (struct point) {0.0, 1.0, 0.0, 0};
+19. myCube.vertices[4] = (struct point) {0.0, 0.0, 1.0, 0};
+20. myCube.vertices[5] = (struct point) {1.0, 0.0, 1.0, 0};
+21. myCube.vertices[6] = (struct point) {1.0, 1.0, 1.0, 0};
+22. myCube.vertices[7] = (struct point) {0.0, 1.0, 1.0, 0};
+23. // Accessing a vertex
+24. printf("Vertex 0: (%f, %f, %f, %d)\n", myCube.vertices[0].x, myCube.vertices[0].y, myCube.vertices[0].z, myCube.vertices[0].t);
+25. return 0;
+26. }
+
+------------------------------------------------------------------------------------------------------------------------------
+* Arrays of Structures
+
+- An array of structures in C is a collection where each element is a structure of the same type. This allows you to manage multiple instances of structured data sequentially in memory, in 2 steps: Definition, Initialisation and Access. They are useful when you need to store and manipulate collections of related data items, like records in a database.
+
+1. Definition
+
+struct Student {
+    char name[50];
+    int age;
+    float marks;
+};
+
+struct Student students[10]; // Array of 10 Student structures
+
+2. Initialisation and Access:
+
+students[0].age = 20; // Accessing and setting the age of the first Student
+
+- Pointers to Structures allow you to refer to a structure using its address, which is efficient for memory management and function passing, also in 2 steps: Definition, Initialisation and Access. They are useful when passing structures to functions to avoid copying the entire structure, and managing dynamic data structures like linked lists, trees, etc...
+
+1. Definition
+
+struct Student {
+    char name[50];
+    int age;
+    float marks;
+};
+
+struct Student *ptr; // Pointer to a Student structure
+
+2. Initialisation and Access
+
+struct Student s1;
+ptr = &s1; // ptr now points to s1
+
+// or dynamically allocate memory
+ptr = (struct Student *)malloc(sizeof(struct Student));
+Accessing Members: You use the -> operator to access members of the structure through the pointer.
+
+ptr->age = 20; // Setting the age of the structure pointed to by ptr
+
+- Combining arrays of structures with pointers to structures allows for flexible and efficient data management. For example, you can create an array of structures to store multiple items and use pointers to access and manipulate these structures dynamically. It gives an Array of Pointers to Structures, which is an array where each element is a pointer to a structure:
+
+struct Student *studentArray[10]; // Array of 10 pointers to Student structures
+
+// You can dynamically allocate memory for each structure and assign it to the array.
+for (int i = 0; i < 10; ++i) {
+    studentArray[i] = (struct Student *)malloc(sizeof(struct Student));
+}
+
+//You access and modify the structures through the array of pointers.
+studentArray[0]->age = 20; // Setting the age of the first Student in the array
+
+EX: Code with a structure representing books with attributes, an array of structures to store bookd, and pointers to structures for efficient manipulation of individual book entries. 
+
+1.  #include <stdio.h>
+2.  #include <stdlib.h> // for malloc and free
+3.  // Define a structure for books
+4.  struct Book {
+5.  char title[100];
+6.  char author[50];
+7.  float price;
+8.  };
+9.  int main() {
+10. int num_books;
+11. printf("Enter the number of books: ");
+12. scanf("%d", &num_books);
+13. // Declare an array of structures
+14. struct Book *library = (struct Book *)malloc(num_books * sizeof(struct Book));
+15. if (library == NULL) {
+16. printf("Memory allocation failed\n");
+17. return 1;
+18. }
+19. // Input details of each book
+20. for (int i = 0; i < num_books; ++i) {
+21. printf("\nEnter details for book %d:\n", i + 1);
+22. printf("Title: ");
+23. scanf(" %[^\n]", library[i].title); // read until newline
+24. printf("Author: ");
+25. scanf(" %[^\n]", library[i].author); // read until newline
+26. printf("Price: ");
+27. scanf("%f", &library[i].price);
+28. }
+29. // Displaying details of each book using pointers to structures
+30. printf("\nDetails of books:\n");
+31. for (int i = 0; i < num_books; ++i) {
+32. struct Book *ptr = &library[i]; // pointer to the current book structure
+33. printf("Book %d:\n", i + 1);
+34. printf("Title: %s\n", ptr->title);
+35. printf("Author: %s\n", ptr->author);
+36. printf("Price: %.2f\n", ptr->price);
+37. }
+38. // Free dynamically allocated memory
+39. free(library);
+40. return 0;
+41. }
+
+------------------------------------------------------------------------------------------------------------------------------
+* Self-referential Structures
+
+- They are structures that include a pointer to an instance of the same type. They exist because of quadratic time complexity, allowing for efficient insertion and searching with average-case time complexity of O(log n) for both operations, which is much better than the O(n) complexity.
+
+- In simpler words, to reduce time resolution and prevent memory overuse, self structures are used like: Linked List, Doubly Linked  List, Binary Tree, Graph (Adjacency List Representation), N-ary Tree, Circular Linked List, and Skip List.
+
+- EXAMPLES:
+
+1. A linked list is a sequence of nodes where each node points to the next node in the sequence.
+
+struct ListNode {
+    int data;
+    struct ListNode *next; // Pointer to the next node
+};
+
+2. A doubly linked list is a sequence of nodes where each node points to both the next node and the previous node.
+
+struct DoublyListNode {
+int data;
+struct DoublyListNode *next;  // Pointer to the next node
+struct DoublyListNode *prev;  // Pointer to the previous node
+};
+
+3. A binary tree is a tree data structure where each node has at most two children, referred to as the left child and the right child.
+
+struct TreeNode {
+int data;
+struct TreeNode *left;  // Pointer to the left child
+struct TreeNode *right; // Pointer to the right child
+};
+
+4. A binary search tree is a binary tree with the additional property that the left subtree of a node contains only nodes with keys less than the node’s key, and the right subtree contains only nodes with keys greater than the node’s key.
+
+struct BSTNode {
+int data;
+struct BSTNode *left;  // Pointer to the left child
+struct BSTNode *right; // Pointer to the right child
+};
+
+5. A trie is a tree-like data structure used to store a dynamic set of strings where the keys are usually strings. Each node has an array of pointers to child nodes.
+
+#define ALPHABET_SIZE 26
+struct TrieNode {
+struct TrieNode *children[ALPHABET_SIZE]; // Array of pointers to child nodes
+bool isEndOfWord; // True if the node represents the end of a word
+};
+
+6. In an adjacency list representation of a graph, each vertex has a list of pointers to its adjacent vertices.
+
+struct GraphNode {
+int vertex;
+struct GraphNode *next; // Pointer to the next adjacent vertex
+};
+struct AdjList {
+struct GraphNode *head; // Pointer to the head of the list
+};
+struct Graph {
+int numVertices;
+struct AdjList *array; // Array of adjacency lists
+};
+
+7. An N-ary tree is a tree in which a node can have at most N children.
+
+#define N 3 // Maximum number of children for each node
+struct NaryTreeNode {
+int data;
+struct NaryTreeNode *children[N]; // Array of pointers to children nodes
+};
+
+8. A circular linked list is a linked list where the last node points back to the first node, forming a circle.
+
+struct CircularListNode {
+int data;
+struct CircularListNode *next; // Pointer to the next node, which eventually points back to the head
+};
+
+9. A skip list is a data structure that allows fast search within an ordered sequence of elements. It uses multiple levels of linked lists.
+
+struct SkipListNode {
+int data;
+struct SkipListNode *next; // Pointer to the next node in the current level
+struct SkipListNode *down; // Pointer to the node in the lower level
+};
+
+EX: Code showing how a binary tree works counting word occurrences in the text (This is a simple example. This example is simple.)
+
+1.  #include <stdio.h>
+2.  #include <stdlib.h>
+3.  #include <string.h>
+4.  #include <ctype.h>
+5.  #define ALPHABET_SIZE 26
+6.  // Trie node structure
+7.  struct TrieNode {struct TrieNode* children[ALPHABET_SIZE];int isEndOfWord;int count;};
+8.  // Function to create a new trie node
+
+9.  struct TrieNode* createNode() {struct TrieNode* newNode = (struct TrieNode*)malloc(sizeof(struct TrieNode));newNode->isEndOfWord = 0;newNode->count = 0;for (int i = 0; i < ALPHABET_SIZE; i++) {newNode->children[i] = NULL;}return newNode;}
+
+10. // Function to insert a word into the trie
+
+11. void insert(struct TrieNode* root, const char* word) {struct TrieNode* pCrawl = root;while (*word) {int index = tolower(*word) - 'a';if (!pCrawl->children[index]) {pCrawl->children[index] = createNode();}pCrawl = pCrawl->children[index];word++;}pCrawl->isEndOfWord = 1;pCrawl->count++;}
+
+12. // Function to search for a word in the trie and return its count
+
+13. int search(struct TrieNode* root, const char* word) {struct TrieNode* pCrawl = root;while (*word) {int index = tolower(*word) - 'a';if (!pCrawl->children[index]) {return 0;}pCrawl = pCrawl->children[index];word++;}if (pCrawl->isEndOfWord) {return pCrawl->count;}return 0;}
+
+14. // Function to delete the trie and free memory
+
+15. void deleteTrie(struct TrieNode* root) {for (int i = 0; i < ALPHABET_SIZE; i++) {if (root->children[i]) {deleteTrie(root->children[i]);}}free(root);}
+
+16. // Function to count the occurrences of words in a given text
+
+17. void countWords(struct TrieNode* root, const char* text) {char word[256];int index = 0;while (*text) {if (isalpha(*text)) {word[index++] = tolower(*text);} else {if (index > 0) {word[index] = '\0';insert(root, word);index = 0;}}text++;}if (index > 0) {word[index] = '\0';insert(root, word);}}
+
+18. int main() {struct TrieNode* root = createNode();char text[] = "This is a simple example. This example is simple.";countWords(root, text);char* words[] = {"this", "is", "simple", "example", "a"};for (int i = 0; i < sizeof(words)/sizeof(words[0]); i++) {printf("The word '%s' occurs %d times.\n", words[i], search(root, words[i]));}deleteTrie(root);return 0;}
+
+------------------------------------------------------------------------------------------------------------------------------
+* Table Lookup, and Typedef
+
+- Table lookup is a technique used to replace runtime computation with a simpler array indexing operation. This method can improve performance by using pre-computed values stored in a table (an array). It is commonly used for operations that are repetitive and expensive to compute.
+
+EX: Code converting an hexadecimal character to its decimal value
+
+1.  #include <stdio.h>
+2.  const int hexTable[256] = {
+3.  ['0'] = 0, ['1'] = 1, ['2'] = 2, ['3'] = 3, ['4'] = 4, ['5'] = 5,
+4.  ['6'] = 6, ['7'] = 7, ['8'] = 8, ['9'] = 9, 
+5.  ['a'] = 10, ['b'] = 11, ['c'] = 12, ['d'] = 13, ['e'] = 14, ['f'] = 15,
+6.  ['A'] = 10, ['B'] = 11, ['C'] = 12, ['D'] = 13, ['E'] = 14, ['F'] = 15
+7.  };
+9.  int hexValue(char c) {
+10. return hexTable[(unsigned char)c];
+11. }
+12. int main() {
+13. char c = 'A';
+14. printf("The hexadecimal value of %c is %d\n", c, hexValue(c));
+15. return 0;
+16. }
+
+- Typedef is a keyword used to create new type names (aliases) for existing types. This can make code more readable and easier to manage, especially with complex type definitions like structures, and function pointers.
+
+EXAMPLES:
+
+1. Simple Typedef: In this example, typedef is used to create a new type name ulong for unsigned long.
+
+#include <stdio.h>
+typedef unsigned long ulong;
+int main() {
+    ulong a = 1000000;
+    printf("The value of a is %lu\n", a);
+    return 0;
+}
+
+2. Typedef with Structures: here, typedef is used to create the alias Point for the struct definition, allowing us to declare variables of type Point without having to write struct Point every time.
+
+#include <stdio.h>
+typedef struct {
+    int x;
+    int y;
+} Point;
+int main() {
+    Point p = {10, 20};
+    printf("Point p: (%d, %d)\n", p.x, p.y);
+    return 0;
+}
+
+3. Typedef with Function Pointers: here typedef is used to create the alias funcPtr for a function pointer type that points to functions taking an int parameter and returning void.
+
+#include <stdio.h>
+typedef void (*funcPtr)(int);
+void myFunction(int a) {
+    printf("Value: %d\n", a);
+}
+int main() {
+    funcPtr f = myFunction;
+    f(10); // Calling the function through the pointer
+    return 0;
+}
+
+------------------------------------------------------------------------------------------------------------------------------
+* Union, and Bit-fields
+
+- A union is a data structure that allows you to store different data types in the same memory location. The goal is that all members share the same memory, with only 1 member able to contain a value at any given time. This will come handy for situations where you want to use the same memory for different purposes at different times.
+
+- Bit-fields allow the packing of data in a structure, enabling more efficient use of memory when you need to store multiple binary flags or small integers. You can specify the exact number of bits used for each field in the structure. They are commonly used in embedded systems or network protocols where memory is limited, and precise control over the data size is needed.
+
+- The following code demonstrates the usage of a union and a structure with bit-fields. The union, named Data, is used to store different data types (integer, float, and string) in the same memory location, showcasing how the most recently assigned value is the one that can be accessed. 
+The structure, named Flags, utilises bit-fields to efficiently store and manage small pieces of information, specifically whether a person is a student, an employee, and their age (ranging from 0 to 127). The program initialises and manipulates these structures and prints their values to the console.
+
+EX: A code
+
+1.  #include <stdio.h>
+2.  #include <string.h>
+3.  union Data {
+4.  int i;
+5.  float f;
+6.  char str[20];
+7.  };
+8.  struct Flags {
+9.  unsigned int isStudent : 1;
+10. unsigned int isEmployee : 1;
+11. unsigned int age : 7;
+12. };
+13. int main() {
+14. union Data data;
+15. data.i = 10;
+16. printf("Union stores integer: %d\n", data.i);
+17. data.f = 220.5;
+18. printf("Union stores float: %f\n", data.f);
+19. strcpy(data.str, "C Programming");
+20. printf("Union stores string: %s\n", data.str);
+21. struct Flags flags;
+22. flags.isStudent = 1;
+23. flags.isEmployee = 0;
+24. flags.age = 25;
+25. printf("Flags - isStudent: %d, isEmployee: %d, age: %d\n", flags.isStudent, flags.isEmployee, flags.age);
+26. return 0;
+27. }
+
+##############################################################################################################################
+
+I see you made it this far, good for u, you've almost got everything in C. Soon only experience, ingenuity, and willpower can differentiate you from experts:
 
 
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⣀⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⠶⠚⠛⠉⠉⠉⠀⠀⠉⠉⠙⠓⠦⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣾⣿⠴⠶⠦⢤⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠳⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡿⠛⠛⠒⢦⡀⠀⠀⠉⠙⠳⢶⣤⣄⣀⣀⣀⣀⣀⣤⠜⢷⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡏⠀⠀⠀⠀⠀⠹⣄⠀⠀⢀⠔⠋⠉⠉⠛⢍⠉⠉⣽⠃⠀⢀⣻⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⡤⢾⡇⠀⠀⣸⣧⠤⢤⣏⠉⠙⡏⠀⠀⢀⣀⠀⠈⣧⠴⣷⠶⠾⣿⡟⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⠟⠁⠀⠀⠹⣄⡼⠋⠀⠀⠀⠈⠁⠀⣧⠀⠀⠈⠁⠀⢠⡇⠀⠀⠀⠀⢻⠷⠛⣷⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡟⠁⠀⠀⠀⠀⠀⠀⢳⡄⠀⠀⠀⠀⠀⠀⠈⠳⢄⣀⣀⠴⠋⠀⠀⠀⠀⠀⠀⠀⠀⠸⣇⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⢠⡿⠀⠀⠀⠀⠀⠀⢀⡤⠀⠉⠓⠦⠤⠤⠖⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢻⡄⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣼⠁⠀⠀⠀⠀⠀⠀⣨⠧⣄⣀⡀⠀⠀⠀⠀⠀⢀⣀⣠⡤⠶⠛⡧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣧⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀⠀⠀⠀⠀⠀⠀⠻⣤⣄⡈⠉⠉⠉⠉⠉⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢿⡀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢻⡁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣷⠀⠀⠀⠀⠀⠀⠀⠀⣴⠋⠉⠀⠀⠀⠀⠀⠀⠀⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀⠀⠀⠀⠀⠀⠀⠀⢷⣄⠀⠀⣀⣄⠀⠀⠀⠀⢀⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⢹⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠉⠳⠦⠤⠴⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⣧⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⢠⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⠞⠁⢸⣇⡀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⣿⠀⢻⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡴⠛⠁⠀⣰⠏⠉⠙⠳⢦⣄
+⠀⠀⠀⠀⢀⣤⠞⠻⣆⠀⠙⢷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡤⠞⠉⠀⠀⣠⡾⠁⠀⠀⠀⠀⠀⠈
+⠀⠀⣀⡴⠟⠁⠀⠀⠙⢧⡀⠀⠉⠻⢦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣤⠴⠖⠛⠉⠀⠀⢀⣤⠞⠉⠀⠀⠀⠀⠀⠀⠀⠀
+⣤⠞⠋⠀⠀⠀⠀⠀⠀⠀⠻⣦⡀⠀⠀⠈⠛⢶⣄⠀⠀⠀⠀⠀⣀⣤⠴⠖⠛⠉⠁⠀⠀⠀⠀⣀⡤⠖⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣦⡀⢀⣤⠶⢿⣧⠀⣠⣶⣯⣭⣀⠀⠀⠀⠀⠀⣀⣤⠴⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣷⠏⠀⢠⢬⣿⡿⠋⠁⠀⠀⠈⠙⣦⡴⠖⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠀⠀⢙⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠒⠂⠀⠀⠀⠀⠀⠀⡀⣀⣔
 
 
+##############################################################################################################################
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+* 
 
 * GUI Introduction and SDL2
 
@@ -1048,7 +1497,7 @@ gcc -o sdl_program sdl_program.c -lSDL2
 
 
 - Explanation
-Initialization: SDL_Init(SDL_INIT_VIDEO) initializes the SDL library for video.
+Initialisation: SDL_Init(SDL_INIT_VIDEO) initialises the SDL library for video.
 Create Window: SDL_CreateWindow creates a window.
 Create Renderer: SDL_CreateRenderer creates a renderer for the window.
 Set Draw Color: SDL_SetRenderDrawColor sets the color used for drawing operations (in this case, blue).
