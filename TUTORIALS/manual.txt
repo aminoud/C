@@ -1042,8 +1042,6 @@ EX: Complex C Declarations Involving Pointers to Functions and Arrays of Functio
 29. return 0;
 30. }
 
-- Let's highlight as an example a potential area where complexity might have compromised the code: (*funcPtr) declares funcPtr as a pointer to a function that takes an int and returns an int. If not properly parenthesised, it could be misunderstood as a function returning a pointer.
-
 ##############################################################################################################################
 
 * Structure and Functions
