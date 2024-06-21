@@ -945,7 +945,7 @@ EX: Code with command line Optional Arguments Changes
 48. }
 49. }
 
-Note that changing the program's name on system monitor or htop (top if ur insane) requires system-specific calls, :/ that are not mentioned in this textbook.  
+Note that changing the program's name on system monitor or htop (top if ur an arch linux user)) requires system-specific calls, :/ that are not mentioned in this textbook.  
 
 ------------------------------------------------------------------------------------------------------------------------------
 *Pointers to Functions 
