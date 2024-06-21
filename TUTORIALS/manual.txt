@@ -1,3 +1,5 @@
+Support Link is at the end, thanks :)
+
 Welcome to the Comprehensive Manual of C Language! Whether you're a beginner stepping into the world of programming or an experienced coder familiar with other languages, this manual is designed to equip you with the essential skills and knowledge to master the C programming language.
 
 This manual in the the form of synthetic charts, with examples that encompass main situations leading its readers to a ready to go ability to code. Also, it includes exercises and a reference index of essential reserved words (keywords that we will learn later) in the annexes.
