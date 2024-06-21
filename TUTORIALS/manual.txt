@@ -1,3 +1,5 @@
+RESCUE MANUAL FOR C LANGUAGE!
+100 Pages book to learn C coding or refresh your skills
 Support Link is at the end, thanks :)
 
 Welcome to the Comprehensive Manual of C Language! Whether you're a beginner stepping into the world of programming or an experienced coder familiar with other languages, this manual is designed to equip you with the essential skills and knowledge to master the C programming language.
