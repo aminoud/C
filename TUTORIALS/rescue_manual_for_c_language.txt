@@ -1729,5 +1729,10 @@ Please always refer to Manual references, forums or AI, and remember practice is
 
 To improve, I suggest you to learn platform-specific aspects as the UNIX System Interface Low level: it can be useful for coding things as drivers.
 
+##############################################################################################################################
+SUPPORT LINLKS AND ADRESSES:
 
-
+https://www.amazon.com/dp/B0D7SCM3V3
+BTC: bc1qqnle052lkasvg5ynx9xl9ysdscnyy4u5prp7eg
+ETH: 0xfa1a4FAa4Cec1E637903152BB0D367018acf65FC
+CRO: 0x2E17269742E8549230E4E006b59842F8D397246e
